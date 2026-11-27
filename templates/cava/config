@@ -1,0 +1,32 @@
+[general]
+framerate = 60
+autosens = 1
+sensitivity = 100
+bars = 0
+bar_width = 2
+bar_spacing = 1
+lower_cutoff_freq = 50
+higher_cutoff_freq = 10000
+
+[input]
+method = pulse
+
+[output]
+method = ncurses
+channels = mono
+
+[color]
+background = '@BG@'
+foreground = '@BLUE@'
+gradient = 1
+gradient_color_1 = '@BLUE@'
+gradient_color_2 = '@CYAN@'
+gradient_color_3 = '@PURPLE@'
+gradient_color_4 = '@MAGENTA@'
+gradient_color_5 = '@RED@'
+gradient_color_6 = '@ORANGE@'
+gradient_color_7 = '@YELLOW@'
+gradient_color_8 = '@GREEN@'
+
+[smoothing]
+noise_reduction = 35

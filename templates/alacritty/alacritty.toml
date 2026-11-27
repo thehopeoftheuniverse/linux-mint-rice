@@ -1,0 +1,51 @@
+import = ["~/.config/alacritty/colors.toml"]
+
+[window]
+padding = { x = 14, y = 12 }
+dynamic_padding = true
+decorations = "none"
+opacity = 0.96
+dynamic_title = true
+title = "zsh"
+startup_mode = "Windowed"
+
+[scrolling]
+history = 10000
+multiplier = 3
+
+[font]
+size = 11.0
+offset = { x = 0, y = 1 }
+glyph_offset = { x = 0, y = 0 }
+
+[font.normal]
+family = "JetBrainsMono Nerd Font"
+style = "Regular"
+
+[font.bold]
+family = "JetBrainsMono Nerd Font"
+style = "Bold"
+
+[font.italic]
+family = "JetBrainsMono Nerd Font"
+style = "Italic"
+
+[font.bold_italic]
+family = "JetBrainsMono Nerd Font"
+style = "Bold Italic"
+
+[cursor]
+style = { shape = "Beam", blinking = "On" }
+vi_mode_style = { shape = "Block", blinking = "Off" }
+blink_interval = 600
+unfocused_hollow = true
+
+[mouse]
+hide_when_typing = true
+
+[selection]
+save_to_clipboard = true
+
+[shell]
+program = "/bin/sh"
+args = ["-lc", "fastfetch --config ~/.config/fastfetch/config.jsonc 2>/dev/null; exec zsh -l"]

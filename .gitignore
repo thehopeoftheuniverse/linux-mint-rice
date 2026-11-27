@@ -1,0 +1,11 @@
+# generated at apply time
+build/
+backups/
+# local scratch
+*.log
+*.tmp
+/tmp/
+
+# python bytecode
+__pycache__/
+*.pyc
