@@ -133,7 +133,7 @@ cat <<EOF
  rice deployed · theme: $THEME
 ────────────────────────────────────────────────────────────────────────
  Next: log out, then pick the  i3  session on the login screen.
- (XFCE stays installed and untouched — pick it to go back.)
+ (your current desktop stays installed — pick it at login to go back.)
 
  while inside i3:
    Super+Return   terminal          Super+d        app launcher
