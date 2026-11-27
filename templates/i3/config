@@ -193,3 +193,8 @@ mode "resize" {
 }
 
 bindsym $mod+r mode "resize"
+
+# ── local overrides ─────────────────────────────────────────────────────────
+# This file is yours: apply.sh and theme switching never touch it.
+# Per-machine execs, extra binds and app autostarts belong here.
+include ~/.config/i3/local.conf

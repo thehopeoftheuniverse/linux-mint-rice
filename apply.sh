@@ -112,6 +112,17 @@ if [[ ! -s $HOME/.local/share/wallpapers/current ]]; then
     [[ -n $wp ]] && printf '%s\n' "$wp" > "$HOME/.local/share/wallpapers/current"
 fi
 
+# personal overrides live outside the repo and are never overwritten
+if [[ ! -f $CONF/i3/local.conf ]]; then
+    cat > "$CONF/i3/local.conf" <<'LOCALEOF'
+# Personal i3 overrides — apply.sh and theme switching never touch this file.
+# Examples:
+#   exec --no-startup-id nm-applet
+#   bindsym $mod+p exec pavucontrol
+LOCALEOF
+    echo "  ~/.config/i3/local.conf (created)"
+fi
+
 echo
 echo "── gtk / cursor defaults"
 command -v gsettings >/dev/null && {
