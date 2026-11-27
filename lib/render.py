@@ -37,6 +37,15 @@ GLYPHS = {
     "GLYPH_NEXT":    chr(0xF051),
     "GLYPH_SEARCH":  chr(0xF002),
     "GLYPH_BELL":    chr(0xF0F3),
+    "GLYPH_WEB":     chr(0xF0AC),  # globe
+    "GLYPH_CODE":    chr(0xF121),
+    "GLYPH_MAIL":    chr(0xF0E0),
+    "GLYPH_BOOK":    chr(0xF02D),
+    "GLYPH_COGS":    chr(0xF085),
+    "GLYPH_BARS":    chr(0xF0C9),
+    "GLYPH_CLIP":    chr(0xF0EA),
+    "GLYPH_DOWNLOAD": chr(0xF0ED),
+    "GLYPH_UPDATE":  chr(0xF0AA),  # arrow-circle-up
 }
 
 def main() -> int:

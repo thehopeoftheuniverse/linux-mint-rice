@@ -23,6 +23,23 @@ boots the whole rice in a private Xvfb display and writes PNGs into `screenshots
 
 ---
 
+## What's in the box
+
+Beyond the window manager and bar:
+
+- **Clipboard history** — a 1 Hz xclip watcher, `Super+v` to pick from the last 80 entries
+- **Notification history** — dunst's backlog in rofi, `Super+Shift+n`
+- **Wallpaper picker** — rofi grid with live thumbnails, `Super+Shift+w`
+- **Pending updates** in the bar, family-aware (apt/dnf/pacman), click to run the upgrade
+- **Now playing** from any MPRIS player, click to pause / skip
+- **Gap and bar toggles** for screen-sharing or focus
+- **Rice doctor** (`Super+F2`) — versions, fonts, config validity in one screen
+- **Live palette switching** — four themes, everything re-renders and reloads
+- **Compositor profiles** — xrender for VMs, glx with blur and rounded corners on demand
+- **`local.conf`** — machine-local i3 overrides the repo never overwrites
+
+---
+
 ## Install
 
 ```bash
@@ -101,6 +118,13 @@ manifest of what existed beforehand. `revert.sh` replays it in reverse. Combined
 | `Super + Shift + Return` | fastfetch window that stays open |
 | `Super + d` | app launcher (rofi) |
 | `Super + n` | wifi / network switcher |
+| `Super + v` | clipboard history |
+| `Super + Shift + n` | notification history |
+| `Super + Shift + g` | toggle gaps |
+| `Super + b` | hide/show the bar |
+| `Super + Shift + w` | wallpaper picker (thumbnails) |
+| `Super + Alt + w` | random wallpaper |
+| `Super + F2` | rice doctor (health check) |
 | `Super + Tab` | window switcher |
 | `Super + Shift + d` | run command |
 | `Super + e` | file manager |

@@ -111,12 +111,14 @@ if [[ $FAMILY == debian ]]; then
     supported=1
     if [[ $DISTRO_ID == linuxmint ]]; then
         (( major >= 22 )) || supported=0
+    elif [[ $DISTRO_ID == debian ]] || [[ ${ID_LIKE:-} == *debian* && $DISTRO_ID != ubuntu ]]; then
+        (( major >= 12 )) || supported=0      # bookworm ships alacritty 0.12 / polybar 3.6
     else
         (( major >= 24 )) || supported=0
     fi
     if (( supported == 0 )); then
         warn "detected $DISTRO_NAME — the rice targets Ubuntu 24.04 / Mint 22+"
-        warn "older releases ship alacritty 0.10 (YAML), polybar 3.6 and picom 9"
+        warn "older releases ship alacritty < 0.13 (YAML), polybar 3.6 and picom 9"
         (( FORCE )) || die "re-run with --force to install anyway, or upgrade the distro"
         warn "--force given: continuing on an unsupported release"
     else

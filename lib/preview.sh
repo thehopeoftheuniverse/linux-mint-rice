@@ -45,10 +45,20 @@ dbus-run-session -- bash -c '
     sleep 5
     import -window root "'"$SHOTS"'/"$THEME"-terminal.png"
 
-    # 3) real workload: terminal + btop tiled side by side
-    i3-msg "split h" >/dev/null 2>&1
+    # populate three workspaces so the bar strip reads like a real session
+    WS2=$(python3 "'"$RICE"'/lib/wsname.py" 2)
+    WS3=$(python3 "'"$RICE"'/lib/wsname.py" 3)
+    WS1=$(python3 "'"$RICE"'/lib/wsname.py" 1)
+    i3-msg "workspace $WS2" >/dev/null 2>&1; (alacritty -e cava >/dev/null 2>&1 &); sleep 2
+    i3-msg "workspace $WS3" >/dev/null 2>&1; (thunar >/dev/null 2>&1 &); sleep 2
+    i3-msg "workspace $WS1" >/dev/null 2>&1; sleep 1
+
+    # 3) real workload: fastfetch beside btop, sized so neither side is dead space
+    i3-msg "split h" >/dev/null 2>&1; sleep 0.4
     alacritty -e btop >/dev/null 2>&1 &
     sleep 4
+    i3-msg "focus left" >/dev/null 2>&1; sleep 0.3
+    i3-msg "resize set width 46 ppt" >/dev/null 2>&1; sleep 0.6
     import -window root "'"$SHOTS"'/"$THEME"-main.png"
 
     # 4) rofi over the desktop

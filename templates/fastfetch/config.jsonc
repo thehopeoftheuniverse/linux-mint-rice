@@ -10,7 +10,7 @@
     "separator": "  ",
     "key": { "type": "icon", "padding": 1 },
     "color": { "keys": "blue", "title": "magenta", "output": "white" },
-    "percent": { "type": 3 }
+    "percent": { "type": 1 }
   },
   "modules": [
     { "type": "title", "keyColor": "magenta" },

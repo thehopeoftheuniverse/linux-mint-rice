@@ -40,6 +40,8 @@ done
 cp -a "$BUILD/palette.env" "$CONF/ricing/palette.env"
 printf '%s\n' "$THEME" > "$CONF/ricing/current-theme"
 
+python3 "$RICE/compat.py" "$CONF" --verbose 2>/dev/null || true
+
 chmod +x "$CONF"/i3/scripts/*.sh "$CONF"/polybar/scripts/*.sh 2>/dev/null || true
 
 # live reload (ignore failures when not inside an i3 session)

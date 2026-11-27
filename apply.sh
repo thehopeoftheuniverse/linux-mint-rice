@@ -87,10 +87,13 @@ for d in i3 polybar picom rofi dunst alacritty btop cava fastfetch \
     echo "  ~/.config/$d"
 done
 
+# adapt alacritty/polybar config shape to the versions this machine actually has
+python3 "$RICE/lib/compat.py" "$CONF" --verbose
+
 mkdir -p "$CONF/ricing/themes"
 cp -a "$BUILD/Xresources" "$HOME/.Xresources"
 cp -a "$BUILD/palette.env" "$CONF/ricing/palette.env"
-cp -a "$RICE/lib/render.py" "$RICE/lib/theme.sh" "$CONF/ricing/"
+cp -a "$RICE/lib/render.py" "$RICE/lib/theme.sh" "$RICE/lib/compat.py" "$CONF/ricing/"
 cp -a "$RICE/themes/." "$CONF/ricing/themes/"
 mkdir -p "$CONF/ricing/templates"
 cp -a "$RICE/templates/." "$CONF/ricing/templates/"
