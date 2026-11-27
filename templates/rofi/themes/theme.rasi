@@ -52,27 +52,32 @@ prompt {
 entry {
     text-color:         @fg;
     placeholder:        "search…";
-    placeholder-color:  @muted;
+    placeholder-color:  @fg-dim;
     cursor:             text;
 }
 
 listview {
     lines:            9;
     columns:          1;
-    spacing:          4px;
+    spacing:          2px;
     scrollbar:        false;
-    background-color: transparent;
+    background-color: @bg;
+    padding:          8px 10px;
     fixed-height:     false;
     dynamic:          true;
 }
 
 element {
-    padding:          9px 12px;
+    padding:          8px 12px;
     spacing:          10px;
     border-radius:    4px;
-    background-color: transparent;
+    background-color: @bg;
     text-color:       @fg-dim;
 }
+
+element normal.normal    { background-color: @bg; text-color: @fg-dim; }
+element alternate.normal { background-color: @bg; text-color: @fg-dim; }
+element normal.urgent    { background-color: @bg; text-color: @red; }
 
 element selected.normal {
     background-color: @accent;
