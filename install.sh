@@ -130,6 +130,11 @@ case $FAMILY in
     arch)   PM=pacman ;;
 esac
 command -v "$PM" >/dev/null || die "$PM not found on $DISTRO_NAME"
+# a fresh clone should push its own commits, same as the dev checkout
+if [[ -d "$REPO_DIR/.git" ]]; then
+    git -C "$REPO_DIR" config core.hooksPath .githooks 2>/dev/null || true
+fi
+
 command -v sudo >/dev/null || (( EUID == 0 )) || die "sudo is required (or run as root)"
 [[ -f "$REPO_DIR/apply.sh" ]] || die "run this from the repo root (apply.sh not found)"
 

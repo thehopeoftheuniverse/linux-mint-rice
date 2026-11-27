@@ -1,0 +1,13 @@
+#!/bin/sh
+# Every commit in this repo goes to the public remote immediately, so the
+# published rice can never lag behind the config running on the machine.
+# Failures are warnings only: an offline commit must still succeed.
+branch="$(git symbolic-ref --short HEAD 2>/dev/null)" || exit 0
+git remote get-url origin >/dev/null 2>&1 || exit 0
+git rev-parse --abbrev-ref '@{upstream}' >/dev/null 2>&1 || exit 0
+
+if git push -q origin "$branch" 2>/dev/null; then
+    printf '  -> pushed %s to origin\n' "$(git log --oneline -1 | cut -c1-60)"
+else
+    printf '  !! push failed (offline?) — run: git push origin %s\n' "$branch"
+fi

@@ -250,3 +250,12 @@ Palettes follow the upstream [Tokyonight](https://github.com/folke/tokyonight.nv
 cursor from [Bibata](https://github.com/ful1e5/Bibata_Cursor).
 
 MIT — see [LICENSE](LICENSE).
+
+---
+
+## Keeping the repo in sync
+
+Every config change belongs in `templates/` (or `themes/`), never only in `~/.config`.
+`./sync.sh "feat: ..."` commits and pushes in one step, and `.githooks/post-commit`
+pushes automatically after any commit, so the published repo cannot drift behind the
+machine it was built on. `install.sh` points a fresh clone at `.githooks` too.
