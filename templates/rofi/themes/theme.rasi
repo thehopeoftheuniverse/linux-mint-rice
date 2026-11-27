@@ -22,8 +22,7 @@ window {
     width:            620px;
     location:         center;
     anchor:           center;
-    transparency:     "none";
-    background-color: transparent;
+    background-color: @bg;
     border-radius:    6px;
 }
 

@@ -58,7 +58,7 @@ dbus-run-session -- bash -c '
     # 3) real workload: fastfetch beside btop, sized so neither side is dead space
     i3-msg "split h" >/dev/null 2>&1; sleep 0.4
     alacritty -o font.size=13 -e btop >/dev/null 2>&1 &
-    sleep 12
+    sleep 30
     i3-msg "focus left" >/dev/null 2>&1; sleep 0.3
     i3-msg "resize set width 46 ppt" >/dev/null 2>&1; sleep 0.6
     import -window root "'"$SHOTS"'/"$THEME"-main.png"
