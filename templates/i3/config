@@ -85,7 +85,7 @@ bindsym $mod+b             exec --no-startup-id polybar-msg cmd toggle
 bindsym $mod+F2            exec alacritty --hold -e ~/.config/i3/scripts/rice-doctor.sh
 bindsym $mod+F1            exec ~/.config/i3/scripts/cheatsheet.sh
 bindsym $mod+Shift+w       exec ~/.config/i3/scripts/wallpaper-pick.sh
-bindsym $mod+Alt+w         exec ~/.config/i3/scripts/wallpaper.sh --random
+bindsym $mod+Mod1+w         exec ~/.config/i3/scripts/wallpaper.sh --random
 bindsym $mod+Shift+i       exec $term -e btop
 bindsym $mod+c             exec $term -e cava
 
