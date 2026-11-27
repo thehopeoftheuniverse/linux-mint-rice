@@ -32,6 +32,9 @@ GLYPHS = {
     "GLYPH_GIT":     chr(0xF0AA2),
     "GLYPH_PICTURE": chr(0xF03E),
     "GLYPH_MUSIC":   chr(0xF001),
+    "GLYPH_PLAY":    chr(0xF04B),
+    "GLYPH_PAUSE":   chr(0xF04C),
+    "GLYPH_NEXT":    chr(0xF051),
     "GLYPH_SEARCH":  chr(0xF002),
     "GLYPH_BELL":    chr(0xF0F3),
 }

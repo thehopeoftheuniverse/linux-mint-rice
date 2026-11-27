@@ -9,3 +9,6 @@ backups/
 # python bytecode
 __pycache__/
 *.pyc
+
+# screenshots show hostname/IP — generate locally, never commit
+screenshots/

@@ -9,18 +9,17 @@ modest hardware rather than just looking good on a screenshot.
 | | |
 | --- | --- |
 | **WM** | i3 4.23 — gaps, smart gaps, 2px accent borders |
-| **Bar** | Polybar 3.7 — workspaces · title · CPU/RAM/disk/volume/IP/clock/tray/power |
+| **Bar** | Polybar 3.7 — workspaces · title · CPU/RAM/disk/volume/now-playing/clock/tray/power |
 | **Compositor** | Picom 10.2 — `xrender` by default, `glx` (blur + rounded corners) on demand |
 | **Launcher** | Rofi 1.7.5 — apps, run, windows, live keybind cheatsheet |
 | **Terminal** | Alacritty + zsh (autosuggestions, syntax highlighting, fzf, zoxide) |
 | **Notifications** | Dunst — rounded, palette-matched frames |
 | **Palettes** | Tokyonight Storm · Catppuccin Mocha · Gruvbox Dark · Kanagawa Wave |
 
-![desktop](screenshots/tokyonight-desktop.png)
-![workload](screenshots/tokyonight-main.png)
-
-*Both shots are the real session booted on an X server, not a mockup — see
-[`lib/preview.sh`](lib/preview.sh).*
+Screenshots are deliberately **not** published in this repo — they show the author's
+hostname and session details. Generate your own with `./lib/preview.sh <theme>`, which
+boots the whole rice in a private Xvfb display and writes PNGs into `screenshots/`
+(gitignored).
 
 ---
 
@@ -101,6 +100,7 @@ manifest of what existed beforehand. `revert.sh` replays it in reverse. Combined
 | `Super + Return` | terminal (alacritty + fastfetch) |
 | `Super + Shift + Return` | fastfetch window that stays open |
 | `Super + d` | app launcher (rofi) |
+| `Super + n` | wifi / network switcher |
 | `Super + Tab` | window switcher |
 | `Super + Shift + d` | run command |
 | `Super + e` | file manager |
@@ -139,10 +139,6 @@ manifest of what existed beforehand. `revert.sh` replays it in reverse. Combined
 
 Re-renders every config, reloads i3, restarts polybar, reloads dunst, nudges picom and
 swaps the wallpaper if `<theme>.png` exists.
-
-| Tokyonight | Gruvbox |
-| --- | --- |
-| ![](screenshots/tokyonight-main.png) | ![](screenshots/gruvbox-main.png) |
 
 ## Effects
 

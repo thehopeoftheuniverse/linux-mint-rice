@@ -78,6 +78,7 @@ bindsym $mod+Shift+d       exec rofi -show run
 bindsym $mod+e             exec thunar ~
 bindsym $mod+Shift+b       exec xdg-open https://app.element.io
 bindsym $mod+Shift+n       exec xdg-open https://chatgpt.com
+bindsym $mod+n             exec ~/.config/i3/scripts/network-menu.sh
 bindsym $mod+F1            exec ~/.config/i3/scripts/cheatsheet.sh
 bindsym $mod+Shift+w       exec ~/.config/i3/scripts/wallpaper.sh --random
 bindsym $mod+Shift+i       exec $term -e btop
