@@ -27,7 +27,6 @@
     { "type": "gpu", "key": "gpu", "format": "{1}" },
     { "type": "memory", "key": "mem" },
     { "type": "disk", "key": "disk", "folders": "/" },
-    { "type": "localip", "key": "ip", "showIpv4": true, "showIpv6": false },
     "break",
     { "type": "colors", "paddingLeft": 2, "symbol": "circle" }
   ]
