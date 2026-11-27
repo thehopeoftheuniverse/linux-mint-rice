@@ -38,7 +38,7 @@ default_orientation auto
 # ── colours ─────────────────────────────────────────────────────────────────
 client.focused          $accent  $accent  $bg_dark $accent2 $accent
 client.focused_inactive $bg_hl   $bg_hl   $fg_dim  $bg_hl   $bg_hl
-client.unfocused        $muted   $bg_dark $muted   $bg_hl   $muted
+client.unfocused        $muted   $bg_dark $fg_dim  $bg_hl   $muted
 client.urgent           $urgent  $urgent  $bg_dark $urgent  $urgent
 client.placeholder      $bg      $bg      $fg      $bg      $bg
 client.background       $bg

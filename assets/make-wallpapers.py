@@ -65,3 +65,4 @@ PAL = {
 print("mesh wallpapers:")
 for name, (bg, blobs) in PAL.items():
     mesh(name, bg, blobs)
+
