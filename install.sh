@@ -31,9 +31,9 @@ else
     B=""; G=""; Y=""; R=""; N=""
 fi
 step() { printf '\n%s── %s%s\n' "$B" "$*" "$N"; }
-ok()   { printf '   %s+%s %s\n' "$G" "$N" "$*"; }
-warn() { printf '   %s!%s %s\n' "$Y" "$N" "$*"; }
-die()  { printf '\n%sx %s%s\n' "$R" "$*" "$N" >&2; exit 1; }
+ok()   { printf '   %s[ok]%s %s\n' "$G" "$N" "$*"; }
+warn() { printf '   %s[!]%s  %s\n' "$Y" "$N" "$*"; }
+die()  { printf '\n%s[x] %s%s\n' "$R" "$*" "$N" >&2; exit 1; }
 
 usage() {
     cat <<'USAGE'
@@ -159,7 +159,8 @@ ok "core binaries present"
 
 # ── 3. assets ───────────────────────────────────────────────────────────────
 step "fonts"
-if fc-list 2>/dev/null | grep -qi "JetBrainsMono Nerd Font"; then
+font_family="$(fc-match -f '%{family}' 'JetBrainsMono Nerd Font' 2>/dev/null || true)"
+if [[ $font_family == *"JetBrainsMono Nerd Font"* ]]; then
     ok "JetBrainsMono Nerd Font already installed"
 else
     tmp="$(mktemp -d)"
