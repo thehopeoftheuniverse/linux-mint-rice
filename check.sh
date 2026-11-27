@@ -51,6 +51,16 @@ for theme_file in "$REPO_DIR"/themes/*.theme; do
 done
 
 echo
+echo "── package lists"
+for f in debian fedora arch; do
+    if [[ -s "$REPO_DIR/packages/$f.txt" ]]; then
+        note "  packages/$f.txt ($(grep -vcE '^\s*(#|$)' "$REPO_DIR/packages/$f.txt") entries)" "ok"
+    else
+        bad "  packages/$f.txt"
+    fi
+done
+
+echo
 if (( FAIL )); then
     printf '\e[31m%s\e[0m\n' "checks failed"
     exit 1

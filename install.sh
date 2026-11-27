@@ -3,7 +3,8 @@
 #  linux-mint-rice — one-shot installer
 #
 #  Installs every dependency plus the fonts/cursor/theme assets, then deploys
-#  the rice into ~/.config.  On a fresh Ubuntu 24.04 / Linux Mint 22 machine:
+#  the rice into ~/.config.  Works on Debian/Ubuntu/Mint (apt), Fedora/RHEL
+#  (dnf) and Arch/Manjaro (pacman).  On a fresh machine:
 #
 #      git clone https://github.com/thehopeoftheuniverse/linux-mint-rice
 #      cd linux-mint-rice && ./install.sh
@@ -12,7 +13,7 @@
 #      --theme <name>   tokyonight | catppuccin | gruvbox | kanagawa
 #      --no-deploy      install packages + assets only, leave ~/.config alone
 #      --shell          also make zsh your login shell
-#      --skip-apt       skip the package step (already installed)
+#      --skip-packages  skip the package step (already installed)
 #      --force          continue on an unsupported (older) distro release
 #      -h, --help       this text
 # ============================================================================
@@ -39,14 +40,17 @@ usage() {
     cat <<'USAGE'
 linux-mint-rice — one-shot installer
 
-  ./install.sh [--theme NAME] [--no-deploy] [--shell] [--skip-apt] [--force]
+  ./install.sh [--theme NAME] [--no-deploy] [--shell] [--skip-packages] [--force]
 
-  --theme NAME   tokyonight (default) | catppuccin | gruvbox | kanagawa
-  --no-deploy    install packages + assets only, leave ~/.config alone
-  --shell        also make zsh your login shell
-  --skip-apt     skip the package step (already installed)
-  --force        continue on an unsupported (older) distro release
-  -h, --help     this text
+  Supported: Debian/Ubuntu/Mint (apt), Fedora/RHEL (dnf), Arch/Manjaro (pacman).
+  Package lists live in packages/<family>.txt.
+
+  --theme NAME      tokyonight (default) | catppuccin | gruvbox | kanagawa
+  --no-deploy       install packages + assets only, leave ~/.config alone
+  --shell           also make zsh your login shell
+  --skip-packages   skip the package step (alias: --skip-apt)
+  --force           continue on an unsupported (older) distro release
+  -h, --help        this text
 
   A fresh machine needs nothing but git and sudo:
     git clone https://github.com/thehopeoftheuniverse/linux-mint-rice
@@ -59,7 +63,7 @@ while [[ $# -gt 0 ]]; do
         --theme)     THEME="${2:-}"; shift 2 ;;
         --no-deploy) DO_DEPLOY=0; shift ;;
         --shell)     DO_SHELL=1; shift ;;
-        --skip-apt)  SKIP_APT=1; shift ;;
+        --skip-apt|--skip-packages) SKIP_APT=1; shift ;;
         --force)     FORCE=1; shift ;;
         -h|--help)   usage; exit 0 ;;
         *)           die "unknown option: $1 (try --help)" ;;
@@ -78,82 +82,113 @@ DISTRO_ID="${ID:-unknown}"
 DISTRO_NAME="${PRETTY_NAME:-$DISTRO_ID}"
 DISTRO_VER="${VERSION_ID:-0}"
 
-command -v apt-get >/dev/null || die "$DISTRO_NAME has no apt-get — this rice targets Debian/Ubuntu derivatives"
-ok "$DISTRO_NAME"
+detect_family() {
+    case "$DISTRO_ID" in
+        ubuntu|linuxmint|debian|pop|zorin|elementary|kali|neon|raspbian|mx|devuan)
+            echo debian ;;
+        fedora|rhel|centos|rocky|almalinux|ol)
+            echo fedora ;;
+        arch|manjaro|endeavouros|garuda|artix|arcolinux|catchy|reborn)
+            echo arch ;;
+        *)
+            case "${ID_LIKE:-}" in
+                *debian*|*ubuntu*) echo debian ;;
+                *fedora*|*rhel*)   echo fedora ;;
+                *arch*)            echo arch ;;
+                *)                 echo unknown ;;
+            esac ;;
+    esac
+}
+FAMILY="$(detect_family)"
+[[ $FAMILY != unknown ]] || die "$DISTRO_NAME is not a Debian, Fedora or Arch derivative"
+ok "$DISTRO_NAME (family: $FAMILY)"
 
-# The configs need i3 4.23 gaps, polybar 3.7 modules and alacritty 0.13's TOML
-# format. Those ship in Ubuntu 24.04 / Mint 22. Older releases need --force.
-major="${DISTRO_VER%%.*}"
-supported=1
-if [[ "$DISTRO_ID" == "linuxmint" ]]; then
-    (( major >= 22 )) || supported=0
-elif [[ "$DISTRO_ID" == "ubuntu" ]]; then
-    (( major >= 24 )) || supported=0
-elif [[ "${ID_LIKE:-}" == *ubuntu* ]]; then
-    (( major >= 24 )) || supported=0
+# Only the Debian family carries old releases that matter: Ubuntu 24.04 / Mint 22
+# are the first with alacritty 0.13 (TOML config), polybar 3.7 and picom 10.
+# Fedora and Arch are current by construction, so no gate there.
+if [[ $FAMILY == debian ]]; then
+    major="${DISTRO_VER%%.*}"
+    supported=1
+    if [[ $DISTRO_ID == linuxmint ]]; then
+        (( major >= 22 )) || supported=0
+    else
+        (( major >= 24 )) || supported=0
+    fi
+    if (( supported == 0 )); then
+        warn "detected $DISTRO_NAME — the rice targets Ubuntu 24.04 / Mint 22+"
+        warn "older releases ship alacritty 0.10 (YAML), polybar 3.6 and picom 9"
+        (( FORCE )) || die "re-run with --force to install anyway, or upgrade the distro"
+        warn "--force given: continuing on an unsupported release"
+    else
+        ok "release $DISTRO_VER supported"
+    fi
 fi
 
-if (( supported == 0 )); then
-    warn "detected $DISTRO_NAME — the rice targets Ubuntu 24.04 / Mint 22+"
-    warn "older releases ship alacritty 0.10 (YAML), polybar 3.6 and picom 9"
-    (( FORCE )) || die "re-run with --force to install anyway, or upgrade the distro"
-    warn "--force given: continuing on an unsupported release"
-else
-    ok "release $DISTRO_VER supported"
-fi
-
+case $FAMILY in
+    debian) PM=apt-get ;;
+    fedora) PM=dnf ;;
+    arch)   PM=pacman ;;
+esac
+command -v "$PM" >/dev/null || die "$PM not found on $DISTRO_NAME"
 command -v sudo >/dev/null || (( EUID == 0 )) || die "sudo is required (or run as root)"
-command -v git >/dev/null || die "git is required — sudo apt install git"
 [[ -f "$REPO_DIR/apply.sh" ]] || die "run this from the repo root (apply.sh not found)"
 
 export DEBIAN_FRONTEND=noninteractive
 SUDO=""; (( EUID != 0 )) && SUDO="sudo"
 
 # ── 2. packages ─────────────────────────────────────────────────────────────
-APT_PKGS=(
-    i3-wm i3status i3lock xss-lock numlockx x11-xserver-utils xinput
-    picom polybar rofi dunst feh libnotify-bin
-    alacritty zsh zsh-autosuggestions zsh-syntax-highlighting tmux
-    thunar papirus-icon-theme lxappearance materia-gtk-theme arc-theme
-    gnome-themes-extra sassc fontconfig
-    xdotool xclip maim slop imagemagick yad arandr pavucontrol
-    pulseaudio-utils network-manager-gnome playerctl pamixer
-    bat eza fzf zoxide ripgrep fd-find tree ncdu btop cava jq curl unzip
-    python3-numpy python3-pil
-    xserver-xephyr
-)
-# optional: not every derivative ships these, nothing breaks without them
-OPT_PKGS=(blueman xfce4-power-manager)
+# The list lives in packages/<family>.txt; entries ending in '?' are optional.
+LIST="$REPO_DIR/packages/$FAMILY.txt"
+[[ -f $LIST ]] || die "missing package list: $LIST"
+
+clean_list() { sed -e 's/#.*//' -e 's/[[:space:]]*$//' "$LIST" | grep -v '^$'; }
+mapfile -t PKGS < <(clean_list | grep -v '?$')
+mapfile -t OPT_PKGS < <(clean_list | grep '?$' | sed 's/?$//')
+
+refresh_repos() {
+    case $FAMILY in
+        debian) $SUDO apt-get update -qq ;;
+        fedora) $SUDO dnf -q makecache ;;
+        arch)   $SUDO pacman -Sy --noconfirm ;;
+    esac
+}
+
+install_pkgs() {
+    case $FAMILY in
+        debian) $SUDO apt-get install -y -qq --no-install-recommends "$@" ;;
+        fedora) $SUDO dnf install -y -q --setopt=install_weak_deps=False "$@" ;;
+        arch)   $SUDO pacman -S --needed --noconfirm "$@" ;;
+    esac
+}
 
 if (( SKIP_APT == 0 )); then
-    step "packages"
-    $SUDO apt-get update -qq || warn "apt update failed — continuing with existing lists"
+    step "packages ($FAMILY)"
+    [[ $FAMILY == arch ]] && warn "Arch does not support partial upgrades — run 'sudo pacman -Syu' first if this fails"
+    refresh_repos || warn "repo refresh failed — continuing with existing metadata"
 
     FAILED=()
-    if ! $SUDO apt-get install -y -qq --no-install-recommends "${APT_PKGS[@]}" \
-            >/tmp/rice-apt.log 2>&1; then
+    if ! install_pkgs "${PKGS[@]}" >/tmp/rice-pkg.log 2>&1; then
         warn "bulk install hit a problem — retrying package by package"
-        for p in "${APT_PKGS[@]}"; do
-            $SUDO apt-get install -y -qq --no-install-recommends "$p" \
-                >>/tmp/rice-apt.log 2>&1 || FAILED+=("$p")
+        for p in "${PKGS[@]}"; do
+            install_pkgs "$p" >>/tmp/rice-pkg.log 2>&1 || FAILED+=("$p")
         done
     fi
     for p in "${OPT_PKGS[@]}"; do
-        $SUDO apt-get install -y -qq --no-install-recommends "$p" >>/tmp/rice-apt.log 2>&1 || true
+        install_pkgs "$p" >>/tmp/rice-pkg.log 2>&1 || true
     done
 
     if (( ${#FAILED[@]} )); then
         warn "could not install: ${FAILED[*]}"
-        warn "the rice still runs; see /tmp/rice-apt.log"
+        warn "the rice still runs without them; see /tmp/rice-pkg.log"
     else
-        ok "apt packages installed"
+        ok "$((${#PKGS[@]} + ${#OPT_PKGS[@]})) packages installed"
     fi
 else
     step "packages (skipped)"
 fi
 
 for bin in i3 polybar rofi picom alacritty dunst feh; do
-    command -v "$bin" >/dev/null || die "$bin is missing — re-run without --skip-apt"
+    command -v "$bin" >/dev/null || die "$bin is missing — re-run without --skip-packages"
 done
 ok "core binaries present"
 
@@ -192,26 +227,36 @@ step "fastfetch"
 if command -v fastfetch >/dev/null; then
     ok "already installed"
 else
-    tmp="$(mktemp -d)"
-    if curl -fsSL -o "$tmp/ff.deb" \
-        https://github.com/fastfetch-cli/fastfetch/releases/download/2.71.0/fastfetch-linux-amd64.deb \
-        && $SUDO dpkg -i "$tmp/ff.deb" >/dev/null 2>&1; then
-        ok "fastfetch installed"
+    if [[ $FAMILY != debian ]]; then
+        if install_pkgs fastfetch >>/tmp/rice-pkg.log 2>&1; then
+            ok "fastfetch installed from the distro repo"
+        else
+            warn "fastfetch unavailable — the terminal opens without it"
+        fi
     else
-        warn "fastfetch could not be installed — the terminal opens without it"
+        tmp="$(mktemp -d)"
+        if curl -fsSL -o "$tmp/ff.deb" \
+            https://github.com/fastfetch-cli/fastfetch/releases/download/2.71.0/fastfetch-linux-amd64.deb \
+            && $SUDO dpkg -i "$tmp/ff.deb" >/dev/null 2>&1; then
+            ok "fastfetch installed"
+        else
+            warn "fastfetch could not be installed — the terminal opens without it"
+        fi
+        rm -rf "$tmp"
     fi
-    rm -rf "$tmp"
 fi
 
 step "GTK theme"
-if [[ -d "$HOME/.themes/Tokyonight-Dark" ]]; then
+# the upstream builder writes to ~/.themes as a user and /usr/share/themes as root
+theme_installed() { [[ -d "$HOME/.themes/Tokyonight-Dark" || -d /usr/share/themes/Tokyonight-Dark ]]; }
+if theme_installed; then
     ok "Tokyonight-Dark already installed"
 else
     tmp="$(mktemp -d)"
     if git clone --depth 1 -q https://github.com/Fausto-Korpsvart/Tokyonight-GTK-Theme "$tmp/tng" 2>/dev/null; then
         ( cd "$tmp/tng/themes" && THEME_VARIANTS='' COLOR_VARIANTS='-Dark' SIZE_VARIANTS='' \
             bash install.sh </dev/null >/dev/null 2>&1 ) || true
-        if [[ -d "$HOME/.themes/Tokyonight-Dark" ]]; then
+        if theme_installed; then
             ok "Tokyonight-Dark built"
         else
             warn "GTK theme build failed — falling back to Materia-dark"

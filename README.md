@@ -52,12 +52,33 @@ Tokyonight GTK theme, generates the wallpapers, then deploys the rice into `~/.c
 After it finishes: **log out**, then pick **i3** on the login screen. Your old desktop
 stays installed and stays in that list — that alone is a full rollback.
 
-### Requirements
+### Distro support
 
-Ubuntu 24.04 / Mint 22 or newer, `git`, `sudo`, and network access for the font/cursor/
-theme downloads. Older releases (22.04, Mint 21) ship alacritty 0.10 with the YAML config
-format, polybar 3.6 and picom 9 — the installer refuses unless you pass `--force`, and
-some features will degrade.
+| Family | Distros | Package manager | State |
+| --- | --- | --- | --- |
+| **Debian** | Ubuntu 24.04+, Mint 22+, Pop!_OS, Zorin, Kali, Debian 12+ | `apt` | primary target, developed and tested on Mint 22.3 |
+| **Fedora** | Fedora 40+, RHEL / Rocky / Alma 9+ | `dnf` | installed + deployed end-to-end in a `fedora:latest` container |
+| **Arch** | Arch, Manjaro, EndeavourOS, Garuda, Artix | `pacman` | installed + deployed end-to-end in an `archlinux:latest` container |
+
+Package names live in [`packages/`](packages/) — one list per family, checked package by
+package against each distro's own repository metadata (`dnf repoquery` / `pacman -Sp`), so
+nothing fails silently or hides behind a "close enough" name.
+
+**The desktop environment does not matter.** This rice is a separate X11 *session*, not a
+patch to your DE. The i3 package ships `/usr/share/xsessions/i3.desktop` on every distro —
+verified in both the Fedora and Arch containers — so it shows up next to XFCE, Cinnamon,
+MATE, KDE or GNOME in the login screen. Nothing about KDE or GNOME is touched; pick **i3**
+when you want the rice, pick the old session to go back.
+
+**i3 is X11-only.** On a Wayland-defaulting distro (Fedora Workstation, modern Ubuntu
+GNOME) you log into the X11 i3 session; that works, it just means XWayland/Big Sur style
+mixed-DPI tricks are not part of this setup.
+
+Only the Debian family has a release gate: Ubuntu 22.04 / Mint 21 ship alacritty 0.10
+(YAML config), polybar 3.6 and picom 9. Those need `--force` and lose some features.
+Fedora and Arch are current by construction, so no gate applies. The Alacritty config
+deliberately uses only keys that 0.13 (Ubuntu 24.04) and 0.17 (Fedora 45, Arch) both
+accept, with the palette inlined so there is no `import` key to version-fight.
 
 ---
 
@@ -153,6 +174,7 @@ xsettingsd) costs **66 MB**.
 ```
 linux-mint-rice/
 ├── install.sh                one-shot installer (packages + assets + deploy)
+├── packages/                 package lists: debian.txt, fedora.txt, arch.txt
 ├── bootstrap.sh              clone-and-install one-liner
 ├── apply.sh                  render + deploy, with backup manifest
 ├── revert.sh                 undo everything
@@ -192,6 +214,9 @@ cava, Xresources and the zsh prompt. Change the palette, everything follows.
 - Rofi theme parses (`rofi -dump-theme`), dunst loads, alacritty loads with no warnings.
 - `apply.sh` → `revert.sh` tested on a throwaway HOME: originals restored, created paths
   removed.
+- Installed and deployed for real inside `archlinux:latest` and `fedora:latest` containers:
+  every package resolved, i3 config validated on i3 4.25, polybar loaded all 7 modules on
+  3.7.2, alacritty 0.17 parsed the config with zero warnings.
 
 Environment quirks already handled:
 

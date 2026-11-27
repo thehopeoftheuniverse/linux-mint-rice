@@ -1,0 +1,64 @@
+# Fedora / RHEL family (dnf)
+# One package per line. '#' starts a comment. Verified against dnf repoquery inside fedora:latest.
+# Packages that only exist on some releases are marked optional and are
+# installed best-effort (failure never aborts the install).
+
+i3
+i3status
+i3lock
+xss-lock
+numlockx
+xrandr
+xsetroot
+xinput
+picom
+polybar
+rofi
+dunst
+feh
+libnotify
+alacritty
+zsh
+zsh-autosuggestions
+zsh-syntax-highlighting
+tmux
+thunar
+papirus-icon-theme
+lxappearance
+sassc
+fontconfig
+xdotool
+xclip
+maim
+slop
+ImageMagick
+yad
+arandr
+pavucontrol
+pulseaudio-utils
+network-manager-applet
+playerctl
+pamixer
+bat
+eza
+fzf
+zoxide
+ripgrep
+fd-find
+tree
+ncdu
+btop
+cava
+jq
+curl
+unzip
+git
+xdg-utils
+fastfetch
+python3-numpy
+python3-pillow
+xorg-x11-server-Xephyr
+# optional
+arc-theme?
+blueman?
+xfce4-power-manager?
