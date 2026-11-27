@@ -3,5 +3,5 @@
 import pathlib, re, sys
 
 cfg = pathlib.Path.home() / ".config/i3/config"
-m = re.search(rf'^set \$ws{re.escape(sys.argv[1])} "(.*)"', cfg.read_text(), re.M)
+m = re.search(rf'^set \$ws{re.escape(sys.argv[1])} "(.*)"', cfg.read_text(encoding="utf-8"), re.M)
 print(m.group(1) if m else "")

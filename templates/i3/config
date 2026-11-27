@@ -14,15 +14,16 @@ set $bg_hl   @BG_HL@
 set $fg      @FG@
 set $fg_dim  @FG_DIM@
 set $muted   @MUTED@
-set $accent  @BLUE@
-set $accent2 @PURPLE@
+set $accent  @ACCENT@
+set $accent2 @ACCENT_ALT@
 set $urgent  @RED@
 set $ok      @GREEN@
 
 # ── geometry ────────────────────────────────────────────────────────────────
-gaps inner 10
-gaps outer 16
-smart_gaps on
+gaps inner 12
+gaps outer 8
+gaps top 48
+# smart_gaps off: preserves `gaps top 48` on single-window workspaces under the floating bar
 for_window [class=".*"] border pixel 2
 default_border pixel 2
 default_floating_border pixel 2
@@ -38,14 +39,15 @@ default_orientation auto
 # ── colours ─────────────────────────────────────────────────────────────────
 client.focused          $accent  $accent  $bg_dark $accent2 $accent
 client.focused_inactive $bg_hl   $bg_hl   $fg_dim  $bg_hl   $bg_hl
-client.unfocused        $muted   $bg_dark $fg_dim  $bg_hl   $muted
+client.unfocused        $bg_hl   $bg_dark $fg_dim  $bg_hl   $bg_hl
 client.urgent           $urgent  $urgent  $bg_dark $urgent  $urgent
 client.placeholder      $bg      $bg      $fg      $bg      $bg
 client.background       $bg
 
 # ── autostart ───────────────────────────────────────────────────────────────
 exec_always --no-startup-id ~/.config/polybar/scripts/launch.sh
-exec --no-startup-id picom --config ~/.config/picom/picom.conf
+exec_always --no-startup-id sh -c 'pkill -f "i3/scripts/autotiling.py" 2>/dev/null || true; ~/.config/i3/scripts/autotiling.py &'
+exec --no-startup-id ~/.config/i3/scripts/effects.sh restore --quiet
 exec --no-startup-id ~/.config/i3/scripts/wallpaper.sh --restore --quiet
 exec --no-startup-id dunst
 exec --no-startup-id ~/.config/i3/scripts/clipboard-watch.sh
@@ -82,10 +84,10 @@ bindsym $mod+v             exec ~/.config/i3/scripts/clipboard-pick.sh
 bindsym $mod+Shift+n       exec ~/.config/i3/scripts/notif-history.sh
 bindsym $mod+Shift+g       exec ~/.config/i3/scripts/toggle-gaps.sh
 bindsym $mod+b             exec --no-startup-id polybar-msg cmd toggle
-bindsym $mod+F2            exec alacritty --hold -e ~/.config/i3/scripts/rice-doctor.sh
+bindsym $mod+F2            exec $term --hold -e ~/.config/i3/scripts/rice-doctor.sh
 bindsym $mod+F1            exec ~/.config/i3/scripts/cheatsheet.sh
 bindsym $mod+Shift+w       exec ~/.config/i3/scripts/wallpaper-pick.sh
-bindsym $mod+Mod1+w         exec ~/.config/i3/scripts/wallpaper.sh --random
+bindsym $mod+Mod1+w        exec ~/.config/i3/scripts/wallpaper.sh --random
 bindsym $mod+Shift+i       exec $term -e btop
 bindsym $mod+c             exec $term -e cava
 
@@ -175,7 +177,7 @@ bindsym $mod+Shift+e       exec ~/.config/i3/scripts/i3exit.sh logout
 bindsym XF86AudioRaiseVolume  exec --no-startup-id ~/.config/i3/scripts/volume.sh up
 bindsym XF86AudioLowerVolume  exec --no-startup-id ~/.config/i3/scripts/volume.sh down
 bindsym XF86AudioMute         exec --no-startup-id ~/.config/i3/scripts/volume.sh mute
-bindsym XF86AudioMicMute      exec --no-startup-id pamixer --default-source -t
+bindsym XF86AudioMicMute      exec --no-startup-id ~/.config/i3/scripts/volume.sh mic-mute
 bindsym $mod+Shift+m          exec --no-startup-id ~/.config/i3/scripts/volume.sh mute
 bindsym XF86AudioPlay         exec --no-startup-id playerctl play-pause
 bindsym XF86AudioNext         exec --no-startup-id playerctl next

@@ -8,7 +8,6 @@ rewritten to the shape their binaries understand.
 usage: compat.py <config-dir> [--verbose]
 """
 import re
-import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -40,7 +39,6 @@ def fix_alacritty(conf: Path) -> str | None:
             return f"WARNING alacritty {ver[0]}.{ver[1]} needs alacritty.toml but it is missing"
         yml.unlink(missing_ok=True)
         return f"alacritty {ver[0]}.{ver[1]} -> alacritty.toml"
-    return None
 
 
 def fix_polybar(conf: Path) -> str | None:
@@ -49,22 +47,28 @@ def fix_polybar(conf: Path) -> str | None:
     if ver is None or not ini.exists() or ver >= (3, 7):
         return None
 
-    text = ini.read_text()
+    text = ini.read_text(encoding="utf-8")
     if "[module/tray]" not in text:
         return None
 
     # 3.6 has no internal/tray: drop the module and use the legacy bar keys
     text = re.sub(r"\n\[module/tray\].*?(?=\n\[|\Z)", "\n", text, flags=re.S)
-    text = text.replace(" tray ", " ")
-    text = re.sub(r"^(modules-right = .*)$",
-                  r"\1\ntray-position = right\ntray-padding = 2\ntray-background = ${colors.background}",
-                  text, count=1, flags=re.M)
+    text = re.sub(r"\btray\b\s*", "", text)
+    text = re.sub(
+        r"^(modules-right = .*)$",
+        r"\1\ntray-position = right\ntray-padding = 4\ntray-background = ${colors.background}",
+        text,
+        count=1,
+        flags=re.M,
+    )
     # 3.6 predates the colorset syntax used above; use the literal bar colour
-    bg = re.search(r"^background = (#[0-9a-fA-F]{6})", text, flags=re.M)
+    bg = re.search(r"^background = (#[0-9a-fA-F]{6,8})", text, flags=re.M)
     if bg:
-        text = text.replace("tray-background = ${colors.background}",
-                            f"tray-background = {bg.group(1)}")
-    ini.write_text(text)
+        text = text.replace(
+            "tray-background = ${colors.background}",
+            f"tray-background = {bg.group(1)}",
+        )
+    ini.write_text(text, encoding="utf-8", newline="\n")
     return f"polybar {ver[0]}.{ver[1]} -> legacy tray keys"
 
 

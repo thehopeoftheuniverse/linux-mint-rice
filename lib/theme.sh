@@ -42,13 +42,17 @@ printf '%s\n' "$THEME" > "$CONF/ricing/current-theme"
 
 python3 "$RICE/compat.py" "$CONF" --verbose 2>/dev/null || true
 
-chmod +x "$CONF"/i3/scripts/*.sh "$CONF"/polybar/scripts/*.sh 2>/dev/null || true
+chmod +x "$CONF"/i3/scripts/*.sh "$CONF"/i3/scripts/*.py "$CONF"/polybar/scripts/*.sh 2>/dev/null || true
 
 # live reload (ignore failures when not inside an i3 session)
+[[ -n ${DISPLAY:-} ]] && command -v xrdb >/dev/null && xrdb -merge "$HOME/.Xresources" 2>/dev/null || true
 i3-msg reload >/dev/null 2>&1 || true
-polybar-msg cmd restart >/dev/null 2>&1 || "$CONF/polybar/launch.sh" || true
+polybar-msg cmd restart >/dev/null 2>&1 || "$CONF/polybar/scripts/launch.sh" >/dev/null 2>&1 || true
 dunstctl reload >/dev/null 2>&1 || pkill -USR1 dunst 2>/dev/null || true
-pkill -USR1 picom 2>/dev/null || true
+pkill -HUP xsettingsd 2>/dev/null || true
+if [[ -x "$CONF/i3/scripts/effects.sh" ]] && pgrep -x picom >/dev/null 2>&1; then
+    "$CONF/i3/scripts/effects.sh" restore --quiet >/dev/null 2>&1 || true
+fi
 
 # theme-matched wallpaper, if one ships with this palette
 for ext in png jpg; do

@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
-# Now playing for polybar. Prints nothing at all when no player is active,
-# so the module simply disappears instead of leaving a dead icon.
+# Now playing for polybar. Prints nothing when no player is active.
 command -v playerctl >/dev/null 2>&1 || exit 0
 
 status="$(playerctl status 2>/dev/null)" || exit 0
@@ -18,9 +17,13 @@ if [[ -n $artist ]]; then
 else
     out="$title"
 fi
-(( ${#out} > 38 )) && out="${out:0:37}..."
+(( ${#out} > 24 )) && out="${out:0:23}…"
 
 icon="@GLYPH_PLAY@"
-[[ $status == "Paused" ]] && icon="@GLYPH_PAUSE@"
+color="@GREEN@"
+if [[ $status == "Paused" ]]; then
+    icon="@GLYPH_PAUSE@"
+    color="@YELLOW@"
+fi
 
-printf '%s  %s\n' "$icon" "$out"
+printf '%%{F%s}%%{T2}%s%%{T-}%%{F-} %%{F@FG_DIM@}%s%%{F-}\n' "$color" "$icon" "$out"

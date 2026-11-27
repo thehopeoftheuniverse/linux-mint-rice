@@ -19,7 +19,8 @@ done
 
 echo
 echo "── python syntax"
-for f in "$REPO_DIR"/lib/*.py "$REPO_DIR"/assets/*.py; do
+for f in "$REPO_DIR"/lib/*.py "$REPO_DIR"/assets/*.py \
+         "$REPO_DIR"/templates/*/scripts/*.py; do
     [[ -f $f ]] || continue
     if python3 -m py_compile "$f" 2>/dev/null; then note "  ${f#"$REPO_DIR"/}" "ok"; else bad "  ${f#"$REPO_DIR"/}"; fi
 done
@@ -47,17 +48,26 @@ for theme_file in "$REPO_DIR"/themes/*.theme; do
         note "  $theme · colours" "ok"
     fi
 
-    rm -rf "$out"
-done
+    if python3 -m json.tool "$out/fastfetch/config.jsonc" >/dev/null 2>&1; then
+        note "  $theme · fastfetch json" "ok"
+    else
+        bad "  $theme · fastfetch json"
+    fi
 
-echo
-echo "── polybar config"
-dupes="$(python3 - "$REPO_DIR/build/tokyonight/polybar/config.ini" <<'PY'
+    if python3 - "$out/alacritty/alacritty.toml" <<'PY' 2>/dev/null
+import sys, tomllib
+with open(sys.argv[1], "rb") as f:
+    tomllib.load(f)
+PY
+    then
+        note "  $theme · alacritty toml" "ok"
+    else
+        bad "  $theme · alacritty toml"
+    fi
+
+    dupes="$(python3 - "$out/polybar/config.ini" <<'PY'
 import sys, re
-try:
-    text = open(sys.argv[1]).read()
-except OSError:
-    sys.exit(0)
+text = open(sys.argv[1], encoding="utf-8").read()
 section, seen, out = None, {}, []
 for line in text.splitlines():
     m = re.match(r"\[([^]]+)\]", line.strip())
@@ -71,7 +81,18 @@ for line in text.splitlines():
 print(", ".join(sorted(set(out))))
 PY
 )"
-if [[ -z $dupes ]]; then note "  no duplicate keys" "ok"; else bad "  duplicate keys: $dupes"; fi
+    if [[ -z $dupes ]]; then note "  $theme · polybar keys" "ok"; else bad "  $theme · polybar dupes: $dupes"; fi
+
+    if command -v rofi >/dev/null; then
+        if rofi -theme "$out/rofi/themes/theme.rasi" -dump-theme >/dev/null 2>&1; then
+            note "  $theme · rofi theme" "ok"
+        else
+            bad "  $theme · rofi theme"
+        fi
+    fi
+
+    rm -rf "$out"
+done
 
 echo
 echo "── package lists"

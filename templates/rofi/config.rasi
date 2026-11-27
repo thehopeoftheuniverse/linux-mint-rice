@@ -1,12 +1,12 @@
 configuration {
     modi:               "drun,run,window,keys";
-    show-icons:         false;
+    show-icons:         true;
     icon-theme:         "Papirus-Dark";
     drun-display-format:"{name}";
-    display-drun:       "  apps";
-    display-run:        "  run";
-    display-window:     "  windows";
-    display-keys:       "  keys";
+    display-drun:       "@GLYPH_SEARCH@  apps";
+    display-run:        "@GLYPH_TERM@  run";
+    display-window:     "@GLYPH_BARS@  windows";
+    display-keys:       "@GLYPH_BOLT@  keys";
     terminal:           "alacritty";
     font:               "JetBrainsMono Nerd Font 11";
     sort:               true;

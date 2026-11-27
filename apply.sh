@@ -98,19 +98,26 @@ cp -a "$RICE/themes/." "$CONF/ricing/themes/"
 mkdir -p "$CONF/ricing/templates"
 cp -a "$RICE/templates/." "$CONF/ricing/templates/"
 printf '%s\n' "$THEME" > "$CONF/ricing/current-theme"
+printf '%s\n' "$RICE" > "$CONF/ricing/repo-dir"
 
 mkdir -p "$CONF/i3/scripts" "$HOME/.local/share/wallpapers" "$HOME/Pictures/Screenshots"
 cp -a "$RICE/assets/wallpapers/." "$HOME/.local/share/wallpapers/"
-chmod +x "$CONF"/i3/scripts/*.sh "$CONF"/polybar/scripts/*.sh "$CONF"/ricing/*.sh 2>/dev/null || true
+chmod +x "$CONF"/i3/scripts/*.sh "$CONF"/i3/scripts/*.py "$CONF"/polybar/scripts/*.sh "$CONF"/ricing/*.sh 2>/dev/null || true
 
 # shell config (never clobber silently — the original is in the backup)
 if [[ -f $HOME/.zshrc && ! -f $HOME/.zshrc.pre-rice ]]; then
     cp -a "$HOME/.zshrc" "$HOME/.zshrc.pre-rice"
 fi
-cp -a "$RICE/templates/zsh/.zshrc" "$HOME/.zshrc"
+cp -a "$BUILD/zsh/.zshrc" "$HOME/.zshrc"
 
-# default wallpaper
-if [[ ! -s $HOME/.local/share/wallpapers/current ]]; then
+# default wallpaper (update if unset or previously set to a bundled theme wallpaper)
+cur_wp=""
+[[ -s $HOME/.local/share/wallpapers/current ]] && cur_wp="$(<"$HOME/.local/share/wallpapers/current")"
+is_bundled=0
+case "$(basename "${cur_wp:-}")" in
+    tokyonight.*|catppuccin.*|gruvbox.*|kanagawa.*) is_bundled=1 ;;
+esac
+if [[ -z $cur_wp || ! -f $cur_wp || $is_bundled -eq 1 ]]; then
     wp="$(find "$HOME/.local/share/wallpapers" -maxdepth 1 -name "$THEME.*" | head -1)"
     [[ -n $wp ]] && printf '%s\n' "$wp" > "$HOME/.local/share/wallpapers/current"
 fi
@@ -152,7 +159,7 @@ cat <<EOF
  while inside i3:
    Super+Return   terminal          Super+d        app launcher
    Super+F1       keybind cheatsheet Super+Shift+x  power menu
-   Super+Shift+w  next wallpaper     Super+Escape   lock
+   Super+Shift+w  wallpaper picker  Super+Escape   lock
 
  change palette:   ~/.config/i3/scripts/theme-switch.sh
  effects on/off:   ~/.config/i3/scripts/effects.sh toggle

@@ -8,12 +8,12 @@ modest hardware rather than just looking good on a screenshot.
 
 | | |
 | --- | --- |
-| **WM** | i3 4.23 — gaps, smart gaps, 2px accent borders |
-| **Bar** | Polybar 3.7 — workspaces · title · CPU/RAM/disk/volume/now-playing/clock/tray/power |
-| **Compositor** | Picom 10.2 — `xrender` by default, `glx` (blur + rounded corners) on demand |
-| **Launcher** | Rofi 1.7.5 — apps, run, windows, live keybind cheatsheet |
-| **Terminal** | Alacritty + zsh (autosuggestions, syntax highlighting, fzf, zoxide) |
-| **Notifications** | Dunst — rounded, palette-matched frames |
+| **WM** | i3 4.23 — smart gaps, dynamic autotiling, 2px accent borders |
+| **Bar** | Polybar 3.7 — floating rounded island bar: launcher · workspaces · title · media · updates · network · CPU/RAM · volume · clock · tray · power |
+| **Compositor** | Picom 10.2 — `xrender` by default, `glx` (dual-kawase blur + 12px rounded corners) on demand |
+| **Launcher** | Rofi 1.7.5 — icon-enabled rounded palette: apps, run, windows, live keybind cheatsheet |
+| **Terminal** | Alacritty + zsh (autosuggestions, syntax highlighting, fzf, zoxide, command timer) |
+| **Notifications** | Dunst — 12px rounded, icon-enabled, palette-matched frames |
 | **Palettes** | Tokyonight Storm · Catppuccin Mocha · Gruvbox Dark · Kanagawa Wave |
 
 Screenshots are deliberately **not** published in this repo — they show the author's
@@ -145,7 +145,6 @@ manifest of what existed beforehand. `revert.sh` replays it in reverse. Combined
 | `Super + Print` | screenshot focused window |
 | `Super + Escape` | lock (blurred wallpaper) |
 | `Super + Shift + x` | power menu |
-| `Super + Shift + w` | random wallpaper |
 | `Super + Shift + i` | btop |
 | `Super + c` | cava |
 | `Super + Shift + c / r` | reload / restart i3 |

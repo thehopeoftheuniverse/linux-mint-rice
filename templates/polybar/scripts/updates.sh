@@ -8,7 +8,7 @@ if [[ -f $cache ]] && (( $(date +%s) - $(stat -c %Y "$cache" 2>/dev/null || echo
 else
     n=0
     if command -v apt-get >/dev/null; then
-        n="$(apt list --upgradable 2>/dev/null | tail -n +2 | grep -c . || true)"
+        n="$(apt-get -s upgrade 2>/dev/null | grep -c '^Inst ' || true)"
     elif command -v dnf >/dev/null; then
         n="$(dnf -q check-update 2>/dev/null | grep -cE '^[a-zA-Z0-9]' || true)"
     elif command -v pacman >/dev/null; then
@@ -22,5 +22,5 @@ else
     printf '%s' "$n" > "$cache"
 fi
 
-(( n > 0 )) && printf '%%{F@BLUE@}@GLYPH_UPDATE@ %s%%{F-}\n' "$n"
+(( n > 0 )) && printf '%%{F@ORANGE@}%%{T2}@GLYPH_UPDATE@%%{T-}%%{F-} %%{F@FG@}%s%%{F-}\n' "$n"
 exit 0

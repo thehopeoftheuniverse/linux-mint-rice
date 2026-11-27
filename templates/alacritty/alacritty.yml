@@ -2,11 +2,11 @@
 # apply.sh picks this file or alacritty.toml based on the installed version.
 window:
   padding:
-    x: 18
-    y: 16
+    x: 20
+    y: 18
   dynamic_padding: true
   decorations: none
-  opacity: 0.96
+  opacity: 1.0
   dynamic_title: true
   title: zsh
 
@@ -27,7 +27,7 @@ font:
   bold_italic:
     family: "JetBrainsMono Nerd Font"
     style: Bold Italic
-  size: 11.5
+  size: 11.0
 
 cursor:
   style:
@@ -46,10 +46,9 @@ selection:
   save_to_clipboard: true
 
 shell:
-  program: /bin/sh
+  program: /bin/zsh
   args:
-    - "-lc"
-    - "fastfetch --config ~/.config/fastfetch/config.jsonc 2>/dev/null; exec zsh -l"
+    - "-l"
 
 colors:
   primary:
@@ -73,14 +72,14 @@ colors:
     yellow:  '@YELLOW@'
     blue:    '@BLUE@'
     magenta: '@PURPLE@'
-    cyan:    '@CYAN@'
-    white:   '@FG@'
+    cyan:    '@TEAL@'
+    white:   '@FG_DIM@'
   bright:
     black:   '@MUTED@'
-    red:     '@RED@'
-    green:   '@GREEN@'
+    red:     '@ORANGE@'
+    green:   '@TEAL@'
     yellow:  '@YELLOW@'
-    blue:    '@BLUE@'
-    magenta: '@PURPLE@'
+    blue:    '@CYAN@'
+    magenta: '@MAGENTA@'
     cyan:    '@CYAN@'
     white:   '@FG@'

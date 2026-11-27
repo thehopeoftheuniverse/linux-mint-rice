@@ -1,26 +1,28 @@
 {
   "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
   "logo": {
-    "type": "none",
-    "padding": { "top": 0, "left": 0, "right": 0 }
+    "type": "file",
+    "source": "~/.config/fastfetch/logo.txt",
+    "padding": { "top": 1, "left": 2, "right": 3 },
+    "color": { "1": "blue", "2": "cyan" }
   },
   "display": {
     "separator": "  ",
-    "key": { "type": "icon", "padding": 1 },
+    "key": { "width": 10 },
     "color": { "keys": "blue", "title": "magenta", "output": "white" },
     "percent": { "type": 1 }
   },
   "modules": [
-    { "type": "title", "keyColor": "magenta" },
+    { "type": "title", "format": "{6}@{7}", "keyColor": "magenta" },
     { "type": "os", "key": "os", "format": "{3} {12}" },
     { "type": "kernel", "key": "kernel" },
     { "type": "uptime", "key": "uptime" },
     { "type": "packages", "key": "pkgs" },
     { "type": "wm", "key": "wm" },
-    { "type": "wmtheme", "key": "theme" },
     { "type": "terminal", "key": "term" },
     { "type": "cpu", "key": "cpu", "format": "{1}" },
     { "type": "memory", "key": "mem" },
-    { "type": "disk", "key": "disk", "folders": "/" },
+    "break",
+    { "type": "colors", "symbol": "circle" }
   ]
 }
