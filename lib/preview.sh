@@ -30,7 +30,9 @@ Xvfb "$DISP" -screen 0 ${W}x${H}x24 +extension GLX +extension RANDR +render -nor
 sleep 1.5
 
 export DISPLAY="$DISP" HOME="$SANDBOX" THEME SHOTS
+REAL_RUNTIME="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
 export XDG_RUNTIME_DIR="/tmp/rice-runtime-$THEME"
+export PULSE_SERVER="unix:$REAL_RUNTIME/pulse/native"
 mkdir -p "$XDG_RUNTIME_DIR"; chmod 700 "$XDG_RUNTIME_DIR"
 
 dbus-run-session -- bash -c '
@@ -55,14 +57,14 @@ dbus-run-session -- bash -c '
 
     # 3) real workload: fastfetch beside btop, sized so neither side is dead space
     i3-msg "split h" >/dev/null 2>&1; sleep 0.4
-    alacritty -e btop >/dev/null 2>&1 &
+    alacritty -o font.size=14 -e btop >/dev/null 2>&1 &
     sleep 4
     i3-msg "focus left" >/dev/null 2>&1; sleep 0.3
     i3-msg "resize set width 46 ppt" >/dev/null 2>&1; sleep 0.6
     import -window root "'"$SHOTS"'/"$THEME"-main.png"
 
     # 4) rofi over the desktop
-    rofi -show drun -show-icons >/dev/null 2>&1 &
+    rofi -show drun >/dev/null 2>&1 &
     sleep 2
     import -window root "'"$SHOTS"'/"$THEME"-rofi.png"
     sleep 0.3

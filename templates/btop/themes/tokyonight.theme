@@ -35,7 +35,7 @@ theme[available_mid]="@CYAN@"
 theme[available_end]="@BLUE@"
 theme[used_start]="@BLUE@"
 theme[used_mid]="@CYAN@"
-theme[used_end]="@PURPLE@"
+theme[used_end]="@CYAN@"
 
 theme[download_start]="@TEAL@"
 theme[download_mid]="@CYAN@"

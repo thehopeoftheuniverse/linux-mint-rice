@@ -17,8 +17,8 @@
     padding = 14
     horizontal_padding = 14
     text_icon_padding = 10
-    frame_width = 2
-    frame_color = "@BLUE@"
+    frame_width = 1
+    frame_color = "@BG_HL@"
     gap_size = 8
     separator_color = frame
     sort = yes
@@ -35,7 +35,7 @@
     stack_duplicates = true
     hide_duplicate_count = false
     show_indicators = yes
-    icon_position = left
+    icon_position = off
     min_icon_size = 24
     max_icon_size = 48
     icon_path = /usr/share/icons/Papirus-Dark/16x16/status/:/usr/share/icons/Papirus-Dark/16x16/devices/
@@ -45,7 +45,7 @@
     always_run_script = true
     title = Dunst
     class = Dunst
-    corner_radius = 12
+    corner_radius = 4
     ignore_dbusclose = false
     mouse_left_click = close_current
     mouse_middle_click = do_action, close_current
@@ -64,7 +64,7 @@
 [urgency_normal]
     background = "@BG@"
     foreground = "@FG@"
-    frame_color = "@BLUE@"
+    frame_color = "@BG_HL@"
     timeout = 6
 
 [urgency_critical]

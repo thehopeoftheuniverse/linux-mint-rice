@@ -1,5 +1,5 @@
 * {
-    bg:            @BG@ee;
+    bg:            @BG@;
     bg-solid:      @BG@;
     bg-alt:        @BG_HL@;
     fg:            @FG@;
@@ -9,6 +9,7 @@
     accent-alt:    @PURPLE@;
     urgent:        @RED@;
 
+    font:             "JetBrainsMono Nerd Font 11";
     background-color: transparent;
     text-color:       @fg;
     border:           0;
@@ -21,23 +22,23 @@ window {
     width:            620px;
     location:         center;
     anchor:           center;
-    transparency:     "real";
+    transparency:     "none";
     background-color: transparent;
-    border-radius:    16px;
+    border-radius:    6px;
 }
 
 mainbox {
     background-color: @bg;
-    border:           2px;
-    border-color:     @bg-alt;
-    border-radius:    16px;
+    border:           1px;
+    border-color:     @accent;
+    border-radius:    6px;
     padding:          16px;
     spacing:          12px;
 }
 
 inputbar {
     background-color: @bg-alt;
-    border-radius:    10px;
+    border-radius:    4px;
     padding:          12px 16px;
     spacing:          10px;
     children:         [ prompt, entry ];
@@ -66,25 +67,25 @@ listview {
 }
 
 element {
-    padding:          10px 12px;
-    spacing:          12px;
-    border-radius:    10px;
+    padding:          9px 12px;
+    spacing:          10px;
+    border-radius:    4px;
     background-color: transparent;
     text-color:       @fg-dim;
 }
 
-element normal.normal  { background-color: transparent; text-color: @fg-dim; }
-element alternate.normal { background-color: transparent; text-color: @fg-dim; }
-
-element selected {
+element selected.normal {
     background-color: @accent;
     text-color:       @bg-solid;
 }
 
-element selected.active { background-color: @accent; text-color: @bg-solid; }
+element selected.active {
+    background-color: @accent;
+    text-color:       @bg-solid;
+}
 
 element-icon {
-    size:   24px;
+    size:   20px;
     cursor: inherit;
 }
 

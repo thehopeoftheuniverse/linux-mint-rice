@@ -4,7 +4,7 @@
 # ============================================================================
 set $mod Mod4
 set $term alacritty
-set $menu rofi -show drun -show-icons
+set $menu rofi -show drun
 
 font pango:JetBrainsMono Nerd Font 10
 
@@ -74,7 +74,7 @@ for_window [class="[Pp]olybar"] border none
 bindsym $mod+Return        exec $term
 bindsym $mod+Shift+Return  exec $term --hold -e fastfetch
 bindsym $mod+d             exec $menu
-bindsym $mod+Tab           exec rofi -show window -show-icons
+bindsym $mod+Tab           exec rofi -show window
 bindsym $mod+Shift+d       exec rofi -show run
 bindsym $mod+e             exec thunar ~
 bindsym $mod+n             exec ~/.config/i3/scripts/network-menu.sh

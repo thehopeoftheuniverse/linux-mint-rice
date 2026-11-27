@@ -1,6 +1,6 @@
 configuration {
     modi:               "drun,run,window,keys";
-    show-icons:         true;
+    show-icons:         false;
     icon-theme:         "Papirus-Dark";
     drun-display-format:"{name}";
     display-drun:       "  apps";

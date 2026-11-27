@@ -22,5 +22,5 @@ else
     printf '%s' "$n" > "$cache"
 fi
 
-(( n > 0 )) && printf '%%{F@YELLOW@}@GLYPH_UPDATE@ %s%%{F-}\n' "$n"
+(( n > 0 )) && printf '%%{F@BLUE@}@GLYPH_UPDATE@ %s%%{F-}\n' "$n"
 exit 0
