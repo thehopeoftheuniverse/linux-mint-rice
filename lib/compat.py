@@ -31,13 +31,15 @@ def fix_alacritty(conf: Path) -> str | None:
         return None
 
     if ver < (0, 13):          # YAML only
-        if yml.exists():
-            toml.unlink(missing_ok=True)
-            return f"alacritty {ver[0]}.{ver[1]} -> alacritty.yml"
+        if not yml.exists():
+            return f"WARNING alacritty {ver[0]}.{ver[1]} needs alacritty.yml but it is missing"
+        toml.unlink(missing_ok=True)
+        return f"alacritty {ver[0]}.{ver[1]} -> alacritty.yml"
     else:                      # TOML only
-        if toml.exists():
-            yml.unlink(missing_ok=True)
-            return f"alacritty {ver[0]}.{ver[1]} -> alacritty.toml"
+        if not toml.exists():
+            return f"WARNING alacritty {ver[0]}.{ver[1]} needs alacritty.toml but it is missing"
+        yml.unlink(missing_ok=True)
+        return f"alacritty {ver[0]}.{ver[1]} -> alacritty.toml"
     return None
 
 
