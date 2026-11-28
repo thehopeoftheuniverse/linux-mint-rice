@@ -9,7 +9,7 @@ set $monitor2 "{{ $host.side_monitor_name }}"
 set $monitor3 "{{ $host.leftside_monitor_name }}"
 set $scratchpad_size {{ $host.scratchpad_size }}
 set $todoist_size {{ $host.todoist_size }}
-set $scrtch_display scratchpad show; move position center;
+set $scrtch_display scratchpad show;
 
 ### --- Autostart --- ###
 exec --no-startup-id sh -c 'command -v xsettingsd >/dev/null 2>&1 && exec xsettingsd'
@@ -58,6 +58,9 @@ exec --no-startup-id ~/.config/i3/scripts/clipboard-daemon.sh
 
 # Restore wallpaper (or apply active theme wallpaper on first run)
 exec_always --no-startup-id ~/.config/i3/scripts/wallpaper-init.sh
+
+# Re-fit the wallpaper when the X screen changes size (VM window resize / RandR)
+exec_always --no-startup-id ~/.config/i3/scripts/wallpaper-watch.sh
 
 {{ if $isBrozi -}}
 # Personal host apps & keyboard layout
@@ -221,16 +224,19 @@ assign [instance="^com.github.ismaelmartinez.teams_for_linux$"] $ws4
 ### --- Scratchpads --- ###
 for_window [class="scrtch"] \
 floating enable, \
+move position center, \
 move scratchpad, \
 resize set $scratchpad_size
 
 for_window [class="^kitty-monitor$"] \
 floating enable, \
+move position center, \
 move scratchpad, \
 resize set $scratchpad_size
 
 for_window [class="upgrade"] \
 floating enable, \
+move position center, \
 move scratchpad, \
 resize set $scratchpad_size
 
@@ -283,7 +289,7 @@ include ~/.config/i3/current-theme.conf
 font pango:JetBrainsMono Nerd Font 11
 
 gaps inner 10
-gaps outer 5
+gaps outer 16
 
 default_border pixel 2
 default_floating_border pixel 2

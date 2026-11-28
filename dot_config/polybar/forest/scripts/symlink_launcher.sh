@@ -1,1 +1,1 @@
-../../rofi/scripts/launcher_t1
+../../../rofi/scripts/launcher_t1

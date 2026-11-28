@@ -213,6 +213,7 @@ log "Backup saved to $BACKUP_DIR (undo anytime with ./revert.sh)"
 
 # Initialize and apply dotfiles via chezmoi
 log "Applying dotfiles with chezmoi..."
+git -C "$SCRIPT_DIR" config core.hooksPath .githooks 2>/dev/null || true
 chezmoi init --source "$SCRIPT_DIR" --apply
 
 if [[ "$ROLE" == "desktop" ]]; then

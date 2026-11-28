@@ -1,0 +1,8 @@
+#!/bin/sh
+# Push every commit so the published rice never drifts from ~/.config.
+# Never fails the commit: a push failure (offline, auth) is only a warning.
+branch="$(git rev-parse --abbrev-ref HEAD 2>/dev/null)" || exit 0
+[ "$branch" = "HEAD" ] && exit 0
+git push -q origin "$branch" 2>/dev/null || \
+  printf 'post-commit: push failed (offline or no auth); run git push manually later.\n' >&2
+exit 0
