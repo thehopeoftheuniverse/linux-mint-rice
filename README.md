@@ -138,7 +138,7 @@ manifest of what existed beforehand. `revert.sh` replays it in reverse. Combined
 | `Super + r` | resize mode (`h j k l`, then `Esc`) |
 | `Super + h j k l` | focus |
 | `Super + Shift + h j k l` | move window |
-| `Super + 1…0` | switch workspace |
+| `Alt + 1…0` | switch workspace |
 | `Super + Shift + 1…0` | move window to workspace |
 | `Print` | screenshot region → clipboard + `~/Pictures/Screenshots` |
 | `Shift + Print` | screenshot whole screen |
