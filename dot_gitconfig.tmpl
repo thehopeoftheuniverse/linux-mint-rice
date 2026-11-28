@@ -1,0 +1,23 @@
+[user]
+	email = {{ .email | default "user@example.com" }}
+	name = {{ .name | default "user" }}
+[init]
+	defaultBranch = main
+[credential "https://github.com"]
+	helper =
+	helper = !/usr/bin/env gh auth git-credential
+[credential "https://gist.github.com"]
+	helper =
+	helper = !/usr/bin/env gh auth git-credential
+[core]
+	untrackedCache = true
+	fsmonitor = false
+
+[diff]
+    tool = kitty
+
+[difftool]
+    prompt = false
+
+[difftool "kitty"]
+    cmd = kitty +kitten diff "$LOCAL" "$REMOTE"

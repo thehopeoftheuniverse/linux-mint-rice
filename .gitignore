@@ -1,14 +1,10 @@
-# generated at apply time
-build/
-backups/
-# local scratch
-*.log
-*.tmp
-/tmp/
-
-# python bytecode
+# Ignore personal secrets, Python caches, local backups, and generated screenshots
+.DS_Store
 __pycache__/
 *.pyc
-
-# screenshots show hostname/IP — generate locally, never commit
+backups/
 screenshots/
+*.ovpn
+dot_config/zsh/private_dot_histfile
+dot_config/zsh/readonly_dot_zcompdump*
+dot_config/zsh/dot_zcompdump*

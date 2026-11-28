@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+set -u
+
+# Works on Linux Mint (mintupdate-cli), Debian, Ubuntu, Pop!_OS, and any Debian-based distro
+if command -v mintupdate-cli >/dev/null 2>&1; then
+  apt_updates=$(mintupdate-cli list 2>/dev/null || true)
+else
+  apt_updates=$(apt-get -s -o Debug::NoLocking=true upgrade 2>/dev/null | awk '/^Inst /{print $2}' || true)
+fi
+
+flatpak_updates=""
+if command -v flatpak >/dev/null 2>&1; then
+  flatpak_updates=$(flatpak remote-ls --updates 2>/dev/null || true)
+fi
+
+apt_updates_num=$(printf '%s\n' "$apt_updates" | grep -c -v '^$' || true)
+flatpak_updates_num=$(printf '%s\n' "$flatpak_updates" | grep -c -v '^$' || true)
+
+if (( apt_updates_num + flatpak_updates_num > 0 )); then
+  (( apt_updates_num > 0 )) && printf '%s\n' "$apt_updates"
+  (( flatpak_updates_num > 0 )) && printf '%s\n' "$flatpak_updates"
+fi

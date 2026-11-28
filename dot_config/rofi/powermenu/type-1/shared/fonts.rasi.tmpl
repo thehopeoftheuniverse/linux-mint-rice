@@ -1,0 +1,4 @@
+{{ $host := index .hosts .chezmoi.hostname | default .hosts.default }}
+* {
+    font: "JetBrainsMono Nerd Font {{ $host.rofi_font_size }}";
+}

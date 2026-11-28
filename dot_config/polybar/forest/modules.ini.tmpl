@@ -1,0 +1,333 @@
+;; Polybar Modules (Nerd Font icons + Debian/Mint auto-detection)
+
+{{ $host := index .hosts .chezmoi.hostname | default .hosts.default }}
+
+[module/alsa]
+type = internal/alsa
+master-soundcard = default
+speaker-soundcard = default
+headphone-soundcard = default
+master-mixer = Master
+interval = 5
+
+format-volume = <ramp-volume> <label-volume>
+format-muted = <label-muted>
+format-muted-prefix = "󰖁 "
+format-muted-prefix-foreground = ${color.red}
+
+label-volume = %percentage%%
+label-muted = Muted
+label-muted-foreground = ${color.sep}
+
+ramp-volume-0 = 󰕿
+ramp-volume-1 = 󰖀
+ramp-volume-2 = 󰕾
+ramp-volume-foreground = ${color.blue}
+ramp-headphones-0 = 󰋋
+
+[module/volume]
+type = internal/pulseaudio
+use-ui-max = false
+interval = 5
+
+format-volume = <ramp-volume> <label-volume>
+format-muted = <label-muted>
+format-muted-prefix = "󰖁 "
+format-muted-prefix-foreground = ${color.red}
+
+label-volume = %percentage%%
+label-muted = Muted
+label-muted-foreground = ${color.sep}
+
+ramp-volume-0 = 󰕿
+ramp-volume-1 = 󰖀
+ramp-volume-2 = 󰕾
+ramp-volume-foreground = ${color.blue}
+
+click-right = ~/.config/rofi/scripts/volume &
+
+[module/pulseaudio]
+inherit = module/volume
+
+[module/bluetooth]
+type = custom/script
+exec = ~/.config/polybar/forest/scripts/bluetooth.sh
+interval = 3
+click-left = bash -c 'command -v blueman-manager >/dev/null && exec blueman-manager || exec ~/.config/polybar/forest/scripts/toggle-bluetooth.sh'
+click-right = ~/.config/polybar/forest/scripts/toggle-bluetooth.sh
+format-padding = 1
+format-foreground = ${color.foreground}
+
+[module/backlight]
+type = internal/backlight
+card = ${env:POLYBAR_BACKLIGHT:intel_backlight}
+use-actual-brightness = true
+enable-scroll = true
+
+format = <ramp> <label>
+label = %percentage%%
+
+ramp-0 = 󰃞
+ramp-1 = 󰃟
+ramp-2 = 󰃝
+ramp-3 = 󰃠
+ramp-4 = 󰃠
+ramp-foreground = ${color.lime}
+
+[module/battery]
+type = internal/battery
+full-at = 99
+battery = ${env:POLYBAR_BATTERY:BAT0}
+adapter = ${env:POLYBAR_ADAPTER:AC}
+poll-interval = 5
+time-format = %H:%M
+
+format-charging = <label-charging>
+format-charging-prefix = "󰂄 "
+format-charging-prefix-foreground = ${color.green}
+
+format-discharging = <ramp-capacity> <label-discharging>
+format-discharging-prefix-foreground = ${color.pink}
+
+format-full = <label-full>
+format-full-prefix = "󰁹 "
+format-full-prefix-foreground = ${color.green}
+
+label-charging = "%percentage%%"
+label-discharging = "%percentage%%"
+label-full = "Full"
+
+ramp-capacity-0 = 󰁺
+ramp-capacity-1 = 󰁼
+ramp-capacity-2 = 󰁾
+ramp-capacity-3 = 󰂀
+ramp-capacity-4 = 󰁹
+ramp-capacity-foreground = ${color.pink}
+
+[module/battery_auto]
+type = custom/script
+exec = ~/.config/polybar/forest/scripts/battery-auto.sh
+interval = 10
+format = <label>
+format-foreground = ${color.foreground}
+
+[module/hid_battery]
+type = custom/script
+exec = ~/.config/polybar/forest/scripts/hid-battery.sh
+interval = 30
+format = <label>
+format-prefix = " "
+format-prefix-foreground = ${color.purple}
+label = "%output%"
+
+[module/cpu]
+type = internal/cpu
+interval = 1
+format = <label>
+format-prefix = " "
+format-prefix-foreground = ${color.yellow}
+label = "%percentage%%"
+
+[module/date]
+type = internal/date
+interval = 1.0
+date = %a, %d %b
+time = %H:%M
+date-alt = %A, %d %B %Y
+time-alt = %H:%M:%S
+
+format = <label>
+format-prefix = "󰥔 "
+format-prefix-foreground = ${color.accent}
+label = %date% · %time%
+
+[module/filesystem]
+type = internal/fs
+mount-0 = /
+interval = 30
+fixed-values = true
+format-mounted = <label-mounted>
+format-mounted-prefix = "󰋊 "
+format-mounted-prefix-foreground = ${color.orange}
+label-mounted = "%used%/%total%"
+
+[module/i3]
+type = internal/i3
+pin-workspaces = true
+strip-wsnumbers = true
+index-sort = true
+enable-click = true
+enable-scroll = false
+wrapping-scroll = false
+reverse-scroll = false
+fuzzy-match = true
+
+ws-icon-0 = 1;
+ws-icon-1 = 2;
+ws-icon-2 = 3;
+ws-icon-3 = 4;
+ws-icon-4 = 5;
+ws-icon-5 = 6;󰈙
+ws-icon-6 = 7;󰈙
+ws-icon-7 = 8;
+ws-icon-8 = 9;
+ws-icon-9 = 10;
+ws-icon-10 = 11;
+ws-icon-11 = 12;
+ws-icon-default = 
+
+format = <label-state> <label-mode>
+
+label-mode = %mode%
+label-mode-padding = 2
+label-mode-background = ${color.red}
+label-mode-foreground = ${color.black}
+
+label-focused = "%index% %icon%"
+label-focused-foreground = ${color.ws-active-fg}
+label-focused-background = ${color.ws-active-bg}
+label-focused-underline = ${color.ws-active-line}
+label-focused-padding = 2
+
+label-unfocused = "%index% %icon%"
+label-unfocused-foreground = ${color.overlay0}
+label-unfocused-padding = 2
+
+label-visible = "%index% %icon%"
+label-visible-foreground = ${color.subtext1}
+label-visible-underline = ${color.surface1}
+label-visible-padding = 2
+
+label-urgent = "%index% %icon%"
+label-urgent-foreground = ${color.red}
+label-urgent-background = ${color.ws-active-bg}
+label-urgent-underline = ${color.red}
+label-urgent-padding = 2
+
+label-separator = ""
+label-separator-padding = 0
+
+[module/memory]
+type = internal/memory
+interval = 2
+format = <label>
+format-prefix = " "
+format-prefix-foreground = ${color.blue}
+label = "%gb_used%"
+
+[module/network]
+type = internal/network
+interface = ${env:POLYBAR_NET_IFACE:eth0}
+interval = 2.0
+accumulate-stats = true
+unknown-as-up = true
+
+format-connected = <label-connected>
+format-connected-prefix = "󰖩 "
+format-connected-prefix-foreground = ${color.accent}
+
+format-disconnected = <label-disconnected>
+format-disconnected-prefix = "󰖪 "
+format-disconnected-prefix-foreground = ${color.orange}
+
+label-connected = "%{A1:networkmanager_dmenu &:}%ifname% 󰇚 %downspeed%%{A}"
+label-disconnected = "%{A1:networkmanager_dmenu &:}Offline%{A}"
+
+[module/temperature]
+type = internal/temperature
+interval = 2
+thermal-zone = 0
+hwmon-path = ${env:CPU_TEMP_PATH:}
+warn-temperature = 80
+units = true
+
+format = <ramp> <label>
+format-warn = <ramp> <label-warn>
+label = %temperature-c%
+label-warn = %temperature-c%
+label-warn-foreground = ${color.red}
+
+ramp-0 = 
+ramp-1 = 
+ramp-2 = 
+ramp-3 = 
+ramp-4 = 
+ramp-foreground = ${color.cyan}
+
+[module/gpu-usage]
+type = custom/script
+exec = ~/.config/polybar/forest/scripts/gpu-usage.sh
+interval = 2
+format = <label>
+format-prefix = "󰢮 "
+format-prefix-foreground = ${color.yellow}
+label = "%output%"
+
+[module/gpu-temperature]
+type = custom/script
+exec = ~/.config/polybar/forest/scripts/gpu-temp.sh
+interval = 2
+format = <label>
+format-prefix = " "
+format-prefix-foreground = ${color.cyan}
+label = "%output%"
+
+[module/vram]
+type = custom/script
+exec = ~/.config/polybar/forest/scripts/gpu-vram.sh
+interval = 2
+format = <label>
+format-prefix = " "
+format-prefix-foreground = ${color.blue}
+label = "%output%"
+
+[module/cpu-fan]
+type = custom/script
+exec = ~/.config/polybar/forest/scripts/fan-speed.sh fan2
+interval = 2
+format = <label>
+format-prefix = "󰈐 "
+format-prefix-foreground = ${color.peach}
+label = "CPU: %output%"
+
+[module/case-fan]
+inherit = module/cpu-fan
+exec = ~/.config/polybar/forest/scripts/fan-speed.sh fan1
+label = "Case: %output%"
+
+[module/gpu-fan]
+inherit = module/cpu-fan
+exec = ~/.config/polybar/forest/scripts/gpu-fan.sh
+label = "GPU: %output%"
+
+[module/keyboard]
+type = internal/xkeyboard
+blacklist-0 = num lock
+blacklist-1 = scroll lock
+format = <label-layout> <label-indicator>
+format-prefix = "󰌌 "
+format-prefix-foreground = ${color.blue-gray}
+label-layout = "%layout%"
+label-indicator-on = "%name%"
+label-indicator-on-foreground = ${color.cyan}
+
+[module/title]
+type = internal/xwindow
+format = <label>
+format-prefix = " "
+format-prefix-foreground = ${color.accent-alt}
+format-foreground = ${color.foreground}
+label = "%title%"
+label-maxlen = 34
+label-empty = "Desktop"
+
+[module/empty]
+type = custom/text
+content = " "
+
+[module/systray]
+type = internal/tray
+tray-size = {{ $host.polybar_tray_size }}
+tray-spacing = 8px
+format-background = ${color.background}
+format-margin = 0

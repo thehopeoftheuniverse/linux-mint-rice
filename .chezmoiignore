@@ -1,0 +1,33 @@
+*.ovpn
+.config/zsh/.zcompdump*
+.config/zsh/.histfile
+
+{{- $role := index . "role" | default "desktop" -}}
+
+{{- if ne .role "desktop" }}
+# server-only exclusions go here
+
+# X11 / window-manager stack
+.Xresources
+.config/i3/**
+.config/polybar/**
+.config/picom/**
+.config/rofi/**
+.config/dunst/**
+.config/gtk-3.0/**
+.config/gtk-4.0/**
+.config/xsettingsd/**
+.config/kitty/**
+.icons/**
+
+# Desktop utilities and graphical assets
+.config/imv/**
+.config/networkmanager-dmenu/**
+.config/wallpapers/**
+.config/scripts/screenlayout/**
+.config/scripts/ui/**
+.config/kitty/sessions/**
+
+# Desktop-only privileged hooks
+install-global-services.sh
+{{- end }}

@@ -1,0 +1,12 @@
+/**
+ * Dragon Ball: Ultra Instinct (Mastered Black UI)
+ **/
+
+* {
+    background:     #050508F2;
+    background-alt: #11131CFF;
+    foreground:     #F4F7FFFF;
+    selected:       #7DF9FFFF;
+    active:         #C084FCFF;
+    urgent:         #FB7185FF;
+}

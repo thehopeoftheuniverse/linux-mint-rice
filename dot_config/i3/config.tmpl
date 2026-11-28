@@ -1,0 +1,292 @@
+# i3 configuration
+# Reference: https://i3wm.org/docs/userguide.html
+{{ $host := index .hosts .chezmoi.hostname | default .hosts.default }}
+{{ $isBrozi := hasPrefix "brozi-" .chezmoi.hostname }}
+
+### --- Variables --- ###
+set $monitor1 "{{ $host.main_monitor_name }}"
+set $monitor2 "{{ $host.side_monitor_name }}"
+set $monitor3 "{{ $host.leftside_monitor_name }}"
+set $scratchpad_size {{ $host.scratchpad_size }}
+set $todoist_size {{ $host.todoist_size }}
+set $scrtch_display scratchpad show; move position center;
+
+### --- Autostart --- ###
+exec --no-startup-id sh -c 'command -v xsettingsd >/dev/null 2>&1 && exec xsettingsd'
+
+# Launch active polybar layout & theme
+exec_always --no-startup-id ~/.config/polybar/launch.sh
+
+# Update dbus environment for systemd user services & portals
+exec --no-startup-id bash -c 'dbus-update-activation-environment --systemd DISPLAY XAUTHORITY XDG_CURRENT_DESKTOP 2>/dev/null || true'
+
+# Polkit authentication agent (Debian / Linux Mint / Ubuntu compatible)
+exec --no-startup-id ~/.config/i3/scripts/polkit-agent.sh
+
+# XDG autostart entries
+exec --no-startup-id sh -c 'command -v dex >/dev/null 2>&1 && dex --autostart --environment i3'
+
+# Apply DPI and cursor size
+exec_always --no-startup-id xrdb -merge ~/.Xresources
+
+# Screen locking on suspend/timeout
+exec --no-startup-id sh -c 'command -v xss-lock >/dev/null 2>&1 && exec xss-lock -l -- ~/.config/i3/scripts/i3lock.sh'
+
+# Smart idle manager (xidlehook if present, else xautolock + xset DPMS)
+exec_always --no-startup-id ~/.config/i3/scripts/smart-auto-idle.sh {{ $host.screensaver_time }} {{ $host.suspend_time }}
+
+# Start compositor (auto-adapts to picom v9/v10 on Debian/Mint or v12+ with animations)
+exec_always --no-startup-id ~/.config/i3/scripts/start-picom.sh
+
+# Start notification daemon
+exec --no-startup-id sh -c 'command -v dunst >/dev/null 2>&1 && ! pgrep -u "$UID" -x dunst >/dev/null && exec dunst'
+
+# NetworkManager tray applet if installed and not already running
+exec --no-startup-id sh -c 'command -v nm-applet >/dev/null 2>&1 && ! pgrep -u "$UID" -x nm-applet >/dev/null && exec nm-applet'
+
+# Configure monitor layout safely
+exec_always --no-startup-id ~/.config/scripts/screenlayout/monitor.sh
+
+# Prevent DPMS sleep while media is actively playing
+exec --no-startup-id sh -c 'sleep 1 && exec ~/.config/i3/scripts/smart-audio-idle.sh'
+
+# Auto-tiling helper (safe no-op if i3-autolayout is not installed)
+exec_always --no-startup-id ~/.config/i3/scripts/autolayout.sh
+
+# Clipboard daemon (xfce4-clipman or greenclip)
+exec --no-startup-id ~/.config/i3/scripts/clipboard-daemon.sh
+
+# Restore wallpaper (or apply active theme wallpaper on first run)
+exec_always --no-startup-id ~/.config/i3/scripts/wallpaper-init.sh
+
+{{ if $isBrozi -}}
+# Personal host apps & keyboard layout
+exec --no-startup-id /usr/bin/flatpak run --branch=stable --arch=x86_64 --command=todoist --file-forwarding com.todoist.Todoist --hidden @@u %U @@
+exec --no-startup-id bash -c "rm -f ~/.config/notion-electron/Singleton* && sleep 2 && notion-electron &"
+exec_always --no-startup-id setxkbmap -layout pl -option "" -option lv3:ralt_switch,compose:menu
+exec --no-startup-id ~/.config/scripts/keyd/figma-watch
+{{- end }}
+
+### --- Mouse and keyboard settings --- ###
+exec_always --no-startup-id xset r rate 500 33
+exec_always --no-startup-id ~/.config/i3/scripts/mouse-init.sh
+
+{{ if $host.has_touchpad -}}
+exec_always --no-startup-id sh -c 'xinput set-prop "{{ $host.touchpad_name }}" "libinput Disable While Typing Enabled" 1 2>/dev/null || true'
+exec_always --no-startup-id sh -c 'xinput set-prop "{{ $host.touchpad_name }}" "libinput Tapping Enabled" 1 2>/dev/null || true'
+exec_always --no-startup-id sh -c 'xinput set-prop "{{ $host.touchpad_name }}" "libinput Natural Scrolling Enabled" 1 2>/dev/null || true'
+exec_always --no-startup-id sh -c 'xinput set-prop "{{ $host.touchpad_name }}" "libinput Tapping Drag Enabled" 1 2>/dev/null || true'
+exec_always --no-startup-id sh -c 'xinput set-prop "{{ $host.touchpad_name }}" "libinput Tapping Drag Lock Enabled" 1 2>/dev/null || true'
+exec_always --no-startup-id sh -c 'xinput set-prop "{{ $host.touchpad_name }}" "libinput Scrolling Pixel Distance" 40 2>/dev/null || true'
+{{- end }}
+
+### --- Workspace definitions --- ###
+set $ws1 "1: Terminals"
+set $ws2 "2: Browsers"
+set $ws3 "3: Coding"
+set $ws4 "4: Communication"
+set $ws5 "5: Task management"
+set $ws6 "6: Context"
+set $ws7 "7"
+set $ws8 "8"
+set $ws9 "9"
+set $ws10 "10"
+set $ws11 "11"
+set $ws12 "12"
+
+{{ if ne $host.main_monitor_name "" -}}
+workspace $ws1 output $monitor1
+workspace $ws2 output $monitor1
+workspace $ws3 output $monitor1
+workspace $ws4 output $monitor1
+workspace $ws5 output $monitor1
+{{ if gt $host.monitor_count 1 -}}
+workspace $ws6 output $monitor2
+workspace $ws7 output $monitor2
+workspace $ws8 output $monitor2
+workspace $ws9 output $monitor2
+workspace $ws10 output $monitor2
+workspace $ws11 output $monitor3
+workspace $ws12 output $monitor3
+{{- else -}}
+workspace $ws7 output $monitor1
+workspace $ws8 output $monitor1
+workspace $ws9 output $monitor1
+workspace $ws10 output $monitor1
+workspace $ws11 output $monitor1
+workspace $ws12 output $monitor1
+{{- end }}
+{{- end }}
+
+### --- Keybinds --- ###
+# Super for WM / apps; Alt for workspace switching
+set $mod Mod4
+set $numlock Mod2
+set $alt Mod1
+
+# Audio & brightness controls
+bindsym XF86AudioRaiseVolume exec --no-startup-id ~/.config/i3/scripts/volume.sh up
+bindsym XF86AudioLowerVolume exec --no-startup-id ~/.config/i3/scripts/volume.sh down
+bindsym XF86AudioMute exec --no-startup-id ~/.config/i3/scripts/volume.sh mute
+bindsym XF86AudioMicMute exec --no-startup-id sh -c 'pactl set-source-mute @DEFAULT_SOURCE@ toggle 2>/dev/null || wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle 2>/dev/null'
+bindsym XF86MonBrightnessUp exec --no-startup-id brightnessctl set +5%
+bindsym XF86MonBrightnessDown exec --no-startup-id brightnessctl set 5%-
+bindsym XF86AudioPlay exec --no-startup-id playerctl play-pause
+bindsym XF86AudioNext exec --no-startup-id playerctl next
+bindsym XF86AudioPrev exec --no-startup-id playerctl previous
+
+# Clipboard history popup
+bindsym $mod+c exec --no-startup-id sh -c 'command -v xfce4-popup-clipman >/dev/null 2>&1 && exec xfce4-popup-clipman || exec ~/.config/rofi/scripts/clipboard'
+
+# Mouse + Super to drag floating windows
+floating_modifier $mod
+focus_wrapping no
+workspace_auto_back_and_forth yes
+tiling_drag modifier titlebar
+
+# Terminal (falls back cleanly if kitty is missing)
+bindsym $mod+Return exec --no-startup-id sh -c 'command -v kitty >/dev/null 2>&1 && exec kitty || exec x-terminal-emulator'
+
+# Kill focused window
+bindsym $mod+q kill
+
+# Rofi menus, UI Studio & utilities
+bindsym $mod+space exec --no-startup-id ~/.config/rofi/scripts/launcher-t1-run
+bindsym $mod+s exec --no-startup-id ~/.config/rofi/scripts/launcher-t1-browser
+bindsym $mod+$alt+c exec --no-startup-id ~/.config/rofi/scripts/launcher-t1-calc
+bindsym $mod+p exec --no-startup-id ~/.config/rofi/scripts/powermenu_t1
+bindsym $mod+t exec --no-startup-id ~/.config/scripts/ui/ui-menu.sh
+bindsym $mod+Shift+w exec --no-startup-id ~/.config/i3/scripts/wallpaper-pick.sh
+bindsym $mod+Shift+n exec --no-startup-id ~/.config/i3/scripts/notif-history.sh
+bindsym $mod+Shift+g exec --no-startup-id ~/.config/i3/scripts/toggle-gaps.sh
+bindsym $mod+Shift+b exec --no-startup-id polybar-msg cmd toggle
+bindsym $mod+F1 exec --no-startup-id ~/.config/i3/scripts/cheatsheet.sh
+bindsym $mod+F2 exec --no-startup-id kitty --hold -e ~/.config/scripts/ui/doctor.sh
+bindsym Print exec --no-startup-id ~/.config/rofi/scripts/screenshot
+bindsym $mod+$alt+v exec --no-startup-id ~/.config/rofi/scripts/volume
+bindsym $mod+n exec --no-startup-id networkmanager_dmenu
+
+# Change focus
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+
+# Move focused window
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
+
+# Split orientation
+bindsym $mod+x split h
+bindsym $mod+z split v
+
+# Fullscreen
+bindsym $mod+Shift+f fullscreen toggle
+
+# Container layout (uses i3-autolayout if available, else native i3 layout)
+bindsym $mod+Shift+s exec --no-startup-id sh -c 'command -v i3-autolayout >/dev/null 2>&1 && exec i3-autolayout stackmode --file-layout /tmp/i3-autolayout-stacked.save || exec i3-msg "layout stacking"'
+bindsym $mod+Shift+t exec --no-startup-id sh -c 'command -v i3-autolayout >/dev/null 2>&1 && exec i3-autolayout tabmode --file-layout /tmp/i3-autolayout-tabbed.save || exec i3-msg "layout tabbed"'
+bindsym $mod+Shift+e layout toggle split
+
+# Toggle tiling / floating
+bindsym $mod+Shift+space floating toggle
+bindsym $mod+$alt+space focus mode_toggle
+bindsym $mod+a focus parent
+
+### --- Launcher keys --- ###
+bindsym $mod+b exec --no-startup-id ~/.config/i3/scripts/browser.sh
+bindsym $mod+f exec --no-startup-id env LAUNCH_YAZI=1 kitty
+
+### --- Workspace keybinds (Alt + 1..0) --- ###
+include ~/.config/i3/normal-no-alt-binds.conf
+
+{{ if gt $host.monitor_count 1 -}}
+# Move current workspace to a specific monitor
+bindsym $mod+Control+1 move workspace to output $monitor1
+bindsym $mod+Control+2 move workspace to output $monitor2
+bindsym $mod+Control+3 move workspace to output $monitor3
+{{- end }}
+
+### --- Window rules --- ###
+assign [class="^notion-electron$"] $ws5
+assign [class="^com.discordapp.Discord$"] $ws4
+assign [instance="^vivaldi-stable$"] $ws2
+assign [instance="^www.messenger.com$"] $ws4
+assign [instance="^web.whatsapp.com$"] $ws4
+assign [class="^ferdium$"] $ws4
+assign [instance="^com.github.ismaelmartinez.teams_for_linux$"] $ws4
+
+### --- Scratchpads --- ###
+for_window [class="scrtch"] \
+floating enable, \
+move scratchpad, \
+resize set $scratchpad_size
+
+for_window [class="^kitty-monitor$"] \
+floating enable, \
+move scratchpad, \
+resize set $scratchpad_size
+
+for_window [class="upgrade"] \
+floating enable, \
+move scratchpad, \
+resize set $scratchpad_size
+
+for_window [class="(?i)todoist"] floating enable, \
+resize set $todoist_size, \
+move position center
+
+for_window [class="^discord$"] layout stacking
+for_window [instance="^www.messenger.com$"] layout stacking
+for_window [instance="^web.whatsapp.com$"] layout stacking
+for_window [class="^ferdium$"] layout stacking
+
+exec_always --no-startup-id ~/.config/i3/scripts/scratchpad-init.sh
+
+# Scratchpad binds
+bindsym $mod+grave [class="^1-scrtch$"] $scrtch_display
+bindsym $mod+Shift+grave [class="^2-scrtch$"] $scrtch_display
+bindsym $mod+w [class="^kitty-monitor$"] $scrtch_display
+bindsym $mod+$alt+f [class="^yazi-scrtch$"] $scrtch_display
+bindsym $mod+u [class="^upgrade$"] $scrtch_display
+bindsym $mod+v [class="^wiremix-scrtch$"] $scrtch_display
+bindsym $mod+m [class="^cliamp-scrtch$"] $scrtch_display
+bindsym $mod+$alt+b [class="^bluetui-scrtch$"] $scrtch_display
+
+### --- Misc keybinds --- ###
+bindsym $mod+Shift+c reload
+bindsym $mod+Shift+r restart
+
+mode "resize" {
+        bindsym h resize shrink width 10 px or 10 ppt
+        bindsym j resize grow height 10 px or 10 ppt
+        bindsym k resize shrink height 10 px or 10 ppt
+        bindsym l resize grow width 10 px or 10 ppt
+
+        bindsym Left resize shrink width 10 px or 10 ppt
+        bindsym Down resize grow height 10 px or 10 ppt
+        bindsym Up resize shrink height 10 px or 10 ppt
+        bindsym Right resize grow width 10 px or 10 ppt
+
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+        bindsym $mod+r mode "default"
+}
+
+bindsym $mod+r mode "resize"
+
+### --- Styling --- ###
+include ~/.config/i3/current-theme.conf
+
+font pango:JetBrainsMono Nerd Font 11
+
+gaps inner 10
+gaps outer 5
+
+default_border pixel 2
+default_floating_border pixel 2
+
+# Machine-local overrides (never overwritten by chezmoi or theme switcher)
+include ~/.config/i3/local.conf

@@ -1,0 +1,14 @@
+yazi_packages = [
+  "yazi-rs/plugins:smart-enter",
+  "yazi-rs/plugins:full-border",
+  "yazi-rs/plugins:git",
+  "yazi-rs/plugins:toggle-pane",
+  "imsi32/yatline",
+  "imsi32/yatline-catppuccin",
+  "barbanevosa/linemode-plus",
+  "lmnek/pandoc",
+  "Jormala/relative-motions",
+  "PHONE1X/lsblk-mount",
+  "pirafrank/what-size",
+  "yazi-rs/plugins:smart-paste",
+]

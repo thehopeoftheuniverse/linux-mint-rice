@@ -1,0 +1,21 @@
+{{- $name := promptStringOnce . "name" "What is your git user name" -}}
+{{- $email := promptStringOnce . "email" "What is your git email address" -}}
+{{- $role := promptStringOnce . "role" "Machine role (desktop or server)" -}}
+
+[data]
+    name = {{ $name | quote }}
+    email = {{ $email | quote }}
+    role = {{ $role | quote }}
+
+[merge]
+    command = "nvim"
+    args = [
+        "-d",
+        "{{ "{{" }} .Destination {{ "}}" }}",
+        "{{ "{{" }} .Source {{ "}}" }}",
+        "{{ "{{" }} .Target {{ "}}" }}"
+    ]
+[git]
+    autoAdd = false
+    autoCommit = false
+    autoPush = false

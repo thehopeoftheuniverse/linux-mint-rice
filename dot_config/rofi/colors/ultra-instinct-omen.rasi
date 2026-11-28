@@ -1,0 +1,12 @@
+/**
+ * Dragon Ball: Ultra Instinct Omen (Deep Void)
+ **/
+
+* {
+    background:     #04060CF2;
+    background-alt: #0C111EFF;
+    foreground:     #E2E8F0FF;
+    selected:       #60A5FAFF;
+    active:         #38BDF8FF;
+    urgent:         #F43F5EFF;
+}

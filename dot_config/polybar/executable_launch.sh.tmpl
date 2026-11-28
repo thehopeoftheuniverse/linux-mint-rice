@@ -1,0 +1,153 @@
+#!/usr/bin/env bash
+set -u
+
+{{ $host := index .hosts .chezmoi.hostname | default .hosts.default }}
+
+dir="$HOME/.config/polybar"
+state_dir="${XDG_CONFIG_HOME:-$HOME/.config}/ui-theme"
+style="forest"
+cfg_path="$dir/$style/config.ini"
+
+# Auto-detect CPU temperature sensor (AMD k10temp/zenpower, Intel coretemp, or ACPI thermal)
+for sensor in k10temp zenpower coretemp thinkpad acpitz; do
+  for hw in /sys/class/hwmon/hwmon*; do
+    if [[ -r "$hw/name" && "$(<"$hw/name")" == "$sensor" ]]; then
+      for inp in "$hw"/temp*_input; do
+        if [[ -r "$inp" ]]; then
+          export CPU_TEMP_PATH="$inp"
+          break 3
+        fi
+      done
+    fi
+  done
+done
+if [[ -z "${CPU_TEMP_PATH:-}" ]]; then
+  for inp in /sys/class/hwmon/hwmon*/temp*_input; do
+    if [[ -r "$inp" ]]; then
+      export CPU_TEMP_PATH="$inp"
+      break
+    fi
+  done
+fi
+
+# Auto-detect primary monitor (honor host config only if that output is connected)
+cfg_mon="{{ $host.main_monitor_name }}"
+if command -v xrandr >/dev/null 2>&1; then
+  connected="$(xrandr --query | awk '/ connected/{print $1}')"
+  if [[ -n "$cfg_mon" ]] && grep -qx "$cfg_mon" <<< "$connected"; then
+    export POLYBAR_MONITOR="$cfg_mon"
+  else
+    primary="$(xrandr --query | awk '/ connected primary/{print $1; exit}')"
+    export POLYBAR_MONITOR="${primary:-$(head -n1 <<< "$connected")}"
+  fi
+fi
+
+# Auto-detect active network interface
+cfg_net="{{ $host.network_interface_name }}"
+if [[ -n "$cfg_net" && -d "/sys/class/net/$cfg_net" ]]; then
+  export POLYBAR_NET_IFACE="$cfg_net"
+else
+  default_iface="$(ip route show default 2>/dev/null | awk '/default/{print $5; exit}')"
+  if [[ -n "$default_iface" ]]; then
+    export POLYBAR_NET_IFACE="$default_iface"
+  else
+    for net in /sys/class/net/*; do
+      name="$(basename "$net")"
+      [[ "$name" == "lo" ]] && continue
+      export POLYBAR_NET_IFACE="$name"
+      break
+    done
+  fi
+fi
+
+# Auto-detect battery & AC adapter
+for ps in /sys/class/power_supply/*; do
+  [[ -r "$ps/type" ]] || continue
+  ptype="$(<"$ps/type")"
+  pname="$(basename "$ps")"
+  if [[ "$ptype" == "Battery" && -z "${POLYBAR_BATTERY:-}" && "$pname" == BAT* ]]; then
+    export POLYBAR_BATTERY="$pname"
+  elif [[ "$ptype" == "Mains" && -z "${POLYBAR_ADAPTER:-}" ]]; then
+    export POLYBAR_ADAPTER="$pname"
+  fi
+done
+
+# Auto-detect backlight device
+for bl in /sys/class/backlight/*; do
+  if [[ -d "$bl" ]]; then
+    export POLYBAR_BACKLIGHT="$(basename "$bl")"
+    break
+  fi
+done
+
+# Compatibility adapter for Polybar < 3.7 (Debian 12 / Mint 21 lack internal/tray)
+pb_ver="$(polybar --version 2>/dev/null | sed -nE 's/^polybar ([0-9]+\.[0-9]+).*/\1/p' | head -n1 || true)"
+if [[ -n "$pb_ver" ]] && command -v python3 >/dev/null 2>&1; then
+  major="${pb_ver%%.*}"
+  minor="${pb_ver#*.}"
+  if (( major < 3 || (major == 3 && minor < 7) )); then
+    compat_dir="/tmp/polybar-compat-${UID}"
+    mkdir -p "$compat_dir"
+    cp -a "$dir/$style/." "$compat_dir/"
+    python3 - "$compat_dir" <<'PY'
+import re, sys
+from pathlib import Path
+
+root = Path(sys.argv[1])
+cfg = root / "config.ini"
+mods = root / "modules.ini"
+
+if mods.exists():
+    mt = mods.read_text(encoding="utf-8")
+    mt = re.sub(r"\n\[module/systray\].*?(?=\n\[|\Z)", "\n", mt, flags=re.S)
+    mods.write_text(mt, encoding="utf-8")
+
+if cfg.exists():
+    ct = cfg.read_text(encoding="utf-8")
+    ct = re.sub(r"\bsystray\b", "", ct)
+    ct = re.sub(
+        r"^(modules-right\s*=.*)$",
+        r"\1\ntray-position = right\ntray-maxsize = 16\ntray-padding = 4\ntray-background = ${color.background}",
+        ct,
+        count=1,
+        flags=re.M,
+    )
+    cfg.write_text(ct, encoding="utf-8")
+PY
+    cfg_path="$compat_dir/config.ini"
+  fi
+fi
+
+# Read chosen bar mode from UI state (sleek | floating | minimal | telemetry)
+bar_mode="sleek"
+if [[ -r "$state_dir/bar-layout" ]]; then
+  bar_mode="$(tr -d '[:space:]' < "$state_dir/bar-layout")"
+fi
+
+case "${1:-}" in
+  --minimal) bar_mode="minimal" ;;
+  --telemetry) bar_mode="telemetry" ;;
+  --floating) bar_mode="floating" ;;
+  --sleek) bar_mode="sleek" ;;
+esac
+
+# Terminate already running bar instances
+killall -q polybar 2>/dev/null || true
+while pgrep -u "$UID" -x polybar >/dev/null 2>&1; do
+  sleep 0.2
+done
+
+{{ if gt $host.monitor_count 1 -}}
+polybar -q main -c "$cfg_path" &
+polybar -q side -c "$cfg_path" &
+polybar -q left -c "$cfg_path" &
+{{- else -}}
+if [[ "$bar_mode" == "minimal" ]]; then
+  polybar -q minimal -c "$cfg_path" &
+elif [[ "$bar_mode" == "telemetry" ]]; then
+  polybar -q main -c "$cfg_path" &
+  polybar -q aux -c "$cfg_path" &
+else
+  polybar -q main -c "$cfg_path" &
+fi
+{{- end }}

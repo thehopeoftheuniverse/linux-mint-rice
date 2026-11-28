@@ -1,0 +1,10 @@
+@import "~/.config/rofi/colors/current-theme.rasi"
+
+* {
+  al:  #00000000;
+  bg:  @background;
+  bga: @background-alt;
+  fg:  @foreground;
+  ac:  @selected;
+  se:  @selected;
+}

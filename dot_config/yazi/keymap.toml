@@ -1,0 +1,166 @@
+[mgr]
+prepend_keymap = [
+  # Zoxide and fzf
+  { on = "z", run = "plugin zoxide", desc = "Jump to a directory via zoxide" },
+  { on = "Z", run = "plugin fzf", desc = "Jump to a file/directory via fzf" },
+
+  # Smart enter plugin
+  { on = "l", run = "plugin smart-enter", desc = "Enter the child directory, or open the file" },
+
+  # Drop to shell vanilla function
+  { on = "!", for = "unix", run = 'shell "$SHELL" --block', desc = "Open $SHELL here" },
+
+  # Vim motions plugin
+  { on = [
+    "1",
+  ], run = "plugin relative-motions 1", desc = "Move in relative steps" },
+  { on = [
+    "2",
+  ], run = "plugin relative-motions 2", desc = "Move in relative steps" },
+  { on = [
+    "3",
+  ], run = "plugin relative-motions 3", desc = "Move in relative steps" },
+  { on = [
+    "4",
+  ], run = "plugin relative-motions 4", desc = "Move in relative steps" },
+  { on = [
+    "5",
+  ], run = "plugin relative-motions 5", desc = "Move in relative steps" },
+  { on = [
+    "6",
+  ], run = "plugin relative-motions 6", desc = "Move in relative steps" },
+  { on = [
+    "7",
+  ], run = "plugin relative-motions 7", desc = "Move in relative steps" },
+  { on = [
+    "8",
+  ], run = "plugin relative-motions 8", desc = "Move in relative steps" },
+  { on = [
+    "9",
+  ], run = "plugin relative-motions 9", desc = "Move in relative steps" },
+
+  # Rofi grid image preview
+  { on = "<C-g>", run = 'shell -- rofi -config ~/.config/rofi/rofi-gridview.rasi -modi filebrowser -show filebrowser -filebrowser-command "ya emit reveal" -filebrowser-directory "$(pwd)"', desc = "Grid view" },
+
+  # linemode-plus plugin
+  { on = [
+    "m",
+    "c",
+  ], run = "linemode size_mtime", desc = "Linemode: size+mtime" },
+
+  # Sorting does not override linemode (recommended) 
+  { on = [
+    ",",
+    "m",
+  ], run = [
+    "sort mtime --reverse=no",
+  ], desc = "Sort by modified time" },
+  { on = [
+    ",",
+    "M",
+  ], run = [
+    "sort mtime --reverse=yes",
+  ], desc = "Sort by modified time (reverse)" },
+  { on = [
+    ",",
+    "b",
+  ], run = [
+    "sort btime --reverse=no",
+  ], desc = "Sort by birth time" },
+  { on = [
+    ",",
+    "B",
+  ], run = [
+    "sort btime --reverse=yes",
+  ], desc = "Sort by birth time (reverse)" },
+  { on = [
+    ",",
+    "s",
+  ], run = [
+    "sort size --reverse=no",
+  ], desc = "Sort by size" },
+  { on = [
+    ",",
+    "S",
+  ], run = [
+    "sort size --reverse=yes",
+  ], desc = "Sort by size (reverse)" },
+
+  # toggle pane plugin
+  { on = "<C-p>", run = "plugin toggle-pane max-preview", desc = "Maximize or restore the preview pane" },
+  { on = "<C-P>", run = "plugin toggle-pane min-preview", desc = "Show or hide the preview pane" },
+
+  # Custom Downloads directory 
+  { on = [
+    "g",
+    "d",
+  ], run = "cd ~/Pobrane", desc = "Go to ~/Pobrane" },
+  { on = [
+    "g",
+    "D",
+  ], run = "cd ~/data", desc = "Go to ~/data" },
+  { on = [
+    "g",
+    "C",
+  ], run = "cd ~/coding", desc = "Go to ~/coding" },
+  { on = [
+    "g",
+    "s",
+  ], run = "cd ~/src", desc = "Go to ~/src" },
+
+  # pandoc plugin
+  { on = [
+    "c",
+    "p",
+  ], run = "plugin pandoc", desc = "Pandoc: Interactive Convert" },
+
+  # tab switching (t + 1 through t + 9)
+  { on = [
+    "t",
+    "1",
+  ], run = "tab_switch 0", desc = "Switch to first tab" },
+  { on = [
+    "t",
+    "2",
+  ], run = "tab_switch 1", desc = "Switch to second tab" },
+  { on = [
+    "t",
+    "3",
+  ], run = "tab_switch 2", desc = "Switch to third tab" },
+  { on = [
+    "t",
+    "4",
+  ], run = "tab_switch 3", desc = "Switch to fourth tab" },
+  { on = [
+    "t",
+    "5",
+  ], run = "tab_switch 4", desc = "Switch to fifth tab" },
+  { on = [
+    "t",
+    "6",
+  ], run = "tab_switch 5", desc = "Switch to sixth tab" },
+  { on = [
+    "t",
+    "7",
+  ], run = "tab_switch 6", desc = "Switch to seventh tab" },
+  { on = [
+    "t",
+    "8",
+  ], run = "tab_switch 7", desc = "Switch to eighth tab" },
+  { on = [
+    "t",
+    "9",
+  ], run = "tab_switch 8", desc = "Switch to ninth tab" },
+
+  # Lsblk mount plugin
+  { on = "M", run = "plugin lsblk-mount", desc = "Open the drive mount manager" },
+
+  # what-size plugin
+  { on = [
+    ".",
+    "s",
+  ], run = "plugin what-size", desc = "Calculate size of the selection or cwd" },
+
+  # smart paste plugin
+  { on = "p", run = "plugin smart-paste", desc = "Paste into the hovered directory or cwd" },
+]
