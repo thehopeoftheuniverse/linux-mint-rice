@@ -163,7 +163,7 @@ error-message {
     border:                      0px solid;
     border-radius:               0px;
     border-color:                @selected;
-    background-color:            black / 10%;
+    background-color:            @background;
     text-color:                  @foreground;
 }
 textbox {

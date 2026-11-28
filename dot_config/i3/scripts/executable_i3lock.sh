@@ -14,7 +14,7 @@ if [[ -r "$THEME_STATE_FILE" ]]; then
 fi
 
 case "$THEME" in
-  ultra-instinct|ultra-instinct-omen)
+  ultra-instinct)
     BG_HEX="050508"
     RING_HEX="1a1d2bff"
     INSIDE_HEX="0a0b10cc"
@@ -22,6 +22,15 @@ case "$THEME" in
     VERIFY_HEX="c084fcff"
     WRONG_HEX="fb7185ff"
     TEXT_HEX="f4f7ffff"
+    ;;
+  goku-ssj4)
+    BG_HEX="080406"
+    RING_HEX="351622ff"
+    INSIDE_HEX="0d0609cc"
+    KEY_HEX="ef233cff"
+    VERIFY_HEX="fbbf24ff"
+    WRONG_HEX="ff3b5cff"
+    TEXT_HEX="fff1f2ff"
     ;;
   tokyo-night)
     BG_HEX="1a1b26"
@@ -80,14 +89,19 @@ if i3lock --version 2>&1 | grep -qiE 'color|ring|Raymond'; then
 fi
 
 # Fallback for stock Debian/Mint i3lock: generate blurred/darkened screenshot if possible
-LOCK_IMG="/tmp/i3lock_${UID}.png"
 if command -v scrot >/dev/null 2>&1 && command -v convert >/dev/null 2>&1; then
-  rm -f "$LOCK_IMG"
-  scrot -z "$LOCK_IMG" 2>/dev/null && \
-    convert "$LOCK_IMG" -scale 10% -blur 0x2.5 -scale 1000% -fill "#${BG_HEX}" -colorize 45% "$LOCK_IMG" 2>/dev/null
-  if [[ -f "$LOCK_IMG" ]]; then
-    exec i3lock -n -e -i "$LOCK_IMG"
+  LOCK_RAW="$(mktemp "/tmp/i3lock_raw_${UID}_XXXXXX.png")"
+  LOCK_IMG="$(mktemp "/tmp/i3lock_${UID}_XXXXXX.png")"
+  trap 'rm -f "$LOCK_RAW" "$LOCK_IMG"' EXIT
+  if scrot -o -z "$LOCK_RAW" 2>/dev/null && \
+     convert "$LOCK_RAW" -scale 10% -blur 0x2.5 -scale 1000% -fill "#${BG_HEX}" -colorize 45% "$LOCK_IMG" 2>/dev/null && \
+     [[ -s "$LOCK_IMG" ]]; then
+    rm -f "$LOCK_RAW"
+    i3lock -n -e -i "$LOCK_IMG"
+    exit $?
   fi
+  rm -f "$LOCK_RAW" "$LOCK_IMG"
+  trap - EXIT
 fi
 
 exec i3lock -n -e -c "$BG_HEX"

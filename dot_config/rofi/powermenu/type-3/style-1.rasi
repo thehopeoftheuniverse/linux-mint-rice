@@ -16,6 +16,10 @@ configuration {
 @import                          "shared/colors.rasi"
 @import                          "shared/fonts.rasi"
 
+/*
+USE_BUTTONS=YES
+*/
+
 * {
     /* Resolution : 1920x1080 */
     box-spacing:                 30px;
@@ -26,7 +30,7 @@ configuration {
     element-padding:             100px 10px;
     element-radius:              0px;
     general-radius:              0px;
-    element-font:                "feather 64";
+    element-font:                "JetBrainsMono Nerd Font 64";
 }
 
 /*****----- Main Window -----*****/
@@ -89,14 +93,14 @@ textbox-prompt-colon {
     padding:                     var(general-padding);
     border-radius:               var(general-radius);
     background-color:            @urgent;
-    text-color:                  @background;
+    text-color:                  @background-solid;
 }
 prompt {
     enabled:                     true;
     padding:                     var(general-padding);
     border-radius:               var(general-radius);
     background-color:            @active;
-    text-color:                  @background;
+    text-color:                  @background-solid;
 }
 
 /*****----- Message -----*****/
@@ -175,5 +179,5 @@ element-text {
 }
 element selected.normal {
     background-color:            var(selected);
-    text-color:                  var(background);
+    text-color:                  var(background-solid);
 }

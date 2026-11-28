@@ -19,7 +19,7 @@ while [[ $# -gt 0 ]]; do
     -h|--help)
       cat <<EOF
 Usage: ./install-debian.sh [OPTIONS]
-  --theme <catppuccin-mocha|ultra-instinct|ultra-instinct-omen|tokyo-night|rose-pine>
+  --theme <catppuccin-mocha|ultra-instinct|goku-ssj4|tokyo-night|rose-pine>
   --role <desktop|server>
   --shell         Set Zsh as your login shell
   --skip-apt      Skip apt package installation
@@ -70,11 +70,11 @@ if [[ "$SKIP_APT" -eq 0 ]] && command -v apt-get >/dev/null 2>&1; then
   if [[ "$ROLE" == "desktop" ]]; then
     DESKTOP_PKGS=(
       i3 i3lock polybar rofi picom dunst feh kitty
-      x11-xserver-utils xinput xss-lock xautolock dex xsettingsd
+      x11-xserver-utils x11-utils xinput xss-lock xautolock dex xsettingsd wmctrl
       maim xdotool xclip xfce4-clipman scrot imagemagick
       brightnessctl playerctl pamixer pavucontrol pulseaudio-utils
       libnotify-bin inotify-tools lm-sensors network-manager-gnome
-      papirus-icon-theme blueman rofi-calc cava thunar numlockx
+      papirus-icon-theme blueman cava thunar numlockx
     )
     install_apt_available "${DESKTOP_PKGS[@]}"
 
@@ -188,8 +188,10 @@ mkdir -p "$BACKUP_DIR/.config"
 : > "$BACKUP_DIR/.manifest"
 
 BACKUP_CFG_DIRS=(
-  i3 polybar picom rofi dunst kitty btop nvim tmux yazi zsh
-  gtk-3.0 gtk-4.0 xsettingsd fastfetch starship atuin
+  atuin bat btop cava dunst fastfetch gh gtk-3.0 gtk-4.0 i3 imv kitty lsd
+  ncdu networkmanager-dmenu nushell nvim nvtop picom polybar rofi
+  rofi-web-search scripts starship systemd tmux ui-theme wallpapers
+  xsettingsd yazi yt-dlp zsh
 )
 BACKUP_HOME_FILES=(.Xresources .bashrc .zshrc .zshenv .gitconfig)
 

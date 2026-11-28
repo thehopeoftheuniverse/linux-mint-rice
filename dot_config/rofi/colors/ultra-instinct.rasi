@@ -5,7 +5,7 @@
 * {
     background:       #050508cc;
     background-solid: #020204ff;
-    background-alt:   #11131cb8;
+    background-alt:   #11131cbf;
     foreground:       #f4f7ffff;
     selected:         #7df9ffff;
     active:           #c084fcff;

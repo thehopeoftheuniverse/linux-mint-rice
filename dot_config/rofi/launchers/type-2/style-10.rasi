@@ -82,7 +82,7 @@ inputbar {
     border-radius:               100%;
     border-color:                @selected;
     background-color:            @selected;
-    text-color:                  @background;
+    text-color:                  @background-solid;
     children:                    [ "prompt", "entry" ];
 }
 
@@ -152,7 +152,7 @@ element {
     cursor:                      pointer;
 }
 element normal.normal {
-    background-color:            @background;
+    background-color:            transparent;
     text-color:                  @foreground;
 }
 element selected.normal {

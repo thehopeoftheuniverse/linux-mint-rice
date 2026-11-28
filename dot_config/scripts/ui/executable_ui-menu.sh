@@ -40,7 +40,7 @@ case "$main_choice" in
     pick=$(printf '%s\n' \
       "$(mark_active catppuccin-mocha "$current_theme")catppuccin-mocha     │ Default Pastel Glass" \
       "$(mark_active ultra-instinct "$current_theme")ultra-instinct       │ Dragon Ball Black UI (Silver & Ki Cyan)" \
-      "$(mark_active ultra-instinct-omen "$current_theme")ultra-instinct-omen  │ Dragon Ball Deep Void (Electric Sapphire)" \
+      "$(mark_active goku-ssj4 "$current_theme")goku-ssj4            │ Dragon Ball SSJ4 Red (Crimson Fur & Gold Ki)" \
       "$(mark_active tokyo-night "$current_theme")tokyo-night          │ Neon Midnight Blue Glass" \
       "$(mark_active rose-pine "$current_theme")rose-pine            │ Rosé Pine Twilight Glass" | \
       rofi_menu "Theme" "Choose desktop theme across i3, Polybar, Rofi, Kitty, Dunst & btop")

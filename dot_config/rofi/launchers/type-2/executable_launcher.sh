@@ -1,20 +1,15 @@
 #!/usr/bin/env bash
+set -u
 
-## Author : Aditya Shakya (adi1090x)
-## Github : @adi1090x
-#
-## Rofi   : Launcher (Modi Drun, Run, File Browser, Window)
-#
-## Available Styles
-#
-## style-1     style-2     style-3     style-4     style-5
-## style-6     style-7     style-8     style-9     style-10
-## style-11    style-12    style-13    style-14    style-15
-
+STYLE_FILE="${XDG_CONFIG_HOME:-$HOME/.config}/ui-theme/rofi-launcher"
 dir="$HOME/.config/rofi/launchers/type-2"
 theme='style-1'
+if [[ -r "$STYLE_FILE" ]]; then
+  style_rel="$(tr -d '[:space:]' < "$STYLE_FILE")"
+  if [[ "$style_rel" == type-2/*.rasi ]] && [[ -f "$HOME/.config/rofi/launchers/$style_rel" ]]; then
+    theme="${style_rel#type-2/}"
+    theme="${theme%.rasi}"
+  fi
+fi
 
-## Run
-rofi \
-    -show drun \
-    -theme ${dir}/${theme}.rasi
+exec rofi -show drun -theme "${dir}/${theme}.rasi"

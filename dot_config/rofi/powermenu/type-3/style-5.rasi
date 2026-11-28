@@ -16,6 +16,10 @@ configuration {
 @import                          "shared/colors.rasi"
 @import                          "shared/fonts.rasi"
 
+/*
+USE_BUTTONS=YES
+*/
+
 * {
     /* Resolution : 1920x1080 */
     box-spacing:                 50px;
@@ -28,7 +32,7 @@ configuration {
     element-padding:             90px 10px;
     element-radius:              80px;
     general-radius:              100%;
-    element-font:                "feather 48";
+    element-font:                "JetBrainsMono Nerd Font 48";
 }
 
 /*****----- Main Window -----*****/
@@ -177,5 +181,5 @@ element-text {
 }
 element selected.normal {
     background-color:            var(selected);
-    text-color:                  var(background);
+    text-color:                  var(background-solid);
 }

@@ -72,14 +72,14 @@ textbox-prompt-colon {
     padding:                     8px 12px;
     border-radius:               0px;
     background-color:            @urgent;
-    text-color:                  @background;
+    text-color:                  @background-solid;
 }
 prompt {
     enabled:                     true;
     padding:                     8px;
     border-radius:               0px;
     background-color:            @active;
-    text-color:                  @background;
+    text-color:                  @background-solid;
 }
 
 /*****----- Message -----*****/
@@ -157,5 +157,5 @@ element-text {
 }
 element selected.normal {
     background-color:            var(selected);
-    text-color:                  var(background);
+    text-color:                  var(background-solid);
 }

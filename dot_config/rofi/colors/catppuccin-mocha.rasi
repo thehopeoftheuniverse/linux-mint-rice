@@ -32,7 +32,7 @@
 
   background:       #1e1e2ecc;
   background-solid: #11111bff;
-  background-alt:   #313244b3;
+  background-alt:   #313244bf;
   foreground:       #cdd6f4ff;
   selected:         #cba6f7ff;
   active:           #a6e3a1ff;

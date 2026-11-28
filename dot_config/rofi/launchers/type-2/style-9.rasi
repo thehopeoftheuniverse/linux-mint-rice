@@ -71,7 +71,7 @@ prompt {
     padding:                     15px;
     border-radius:               100%;
     background-color:            @selected;
-    text-color:                  @background;
+    text-color:                  @background-solid;
 }
 textbox-prompt-colon {
     enabled:                     true;

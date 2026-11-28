@@ -7,8 +7,8 @@ A complete X11 workstation & rice managed with [chezmoi](https://www.chezmoi.io/
 - **Unified UI Studio (`Super + T` or Polybar Palette Icon)**
   - **Themes** (synced live across i3, Polybar, Rofi, Kitty, Dunst, btop, i3lock & wallpapers via [theme-switch.sh](dot_config/scripts/ui/executable_theme-switch.sh)):
     - `catppuccin-mocha` — Default pastel dark
-    - `ultra-instinct` — Dragon Ball **Ultra Instinct** Black UI (`#050508` obsidian void, silver-white `#f4f7ff`, icy cyan `#7df9ff` & aura violet `#c084fc`, custom wallpaper)
-    - `ultra-instinct-omen` — Deep void black + electric sapphire
+    - `ultra-instinct` — Dragon Ball **Ultra Instinct** Black UI (`#050508` obsidian void, silver-white `#f4f7ff`, icy cyan `#7df9ff` & aura violet `#c084fc`, 4K wallpaper)
+    - `goku-ssj4` — Dragon Ball **Goku SSJ4** Red (`#080406` crimson-void, primal SSJ4 crimson fur `#ef233c`, fiery scarlet aura `#fb7185`, golden-amber ki `#fbbf24`, 4K wallpaper)
     - `tokyo-night` — Midnight neon blue
     - `rose-pine` — Rosé Pine twilight glass (`sakura-gate.jpg` wallpaper)
   - **4 Polybar Layouts**: `sleek` (full-width translucent top bar with CPU/RAM stats), `floating` (detached pill bar with accent border), `minimal` (clean floating island with CPU/RAM), `telemetry` (top bar + bottom CPU/GPU bar)

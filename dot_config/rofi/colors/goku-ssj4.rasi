@@ -1,0 +1,13 @@
+/**
+ * Dragon Ball: Goku SSJ4 (Crimson Fur & Golden Ki - Translucent Glass)
+ **/
+
+* {
+    background:       #080406cc;
+    background-solid: #040203ff;
+    background-alt:   #170a0fbf;
+    foreground:       #fff1f2ff;
+    selected:         #ef233cff;
+    active:           #fbbf24ff;
+    urgent:           #ff3b5cff;
+}

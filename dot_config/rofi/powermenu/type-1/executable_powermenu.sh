@@ -37,15 +37,22 @@ rofi_cmd() {
 }
 
 confirm_cmd() {
-  rofi -theme-str 'window {location: center; anchor: center; fullscreen: false; width: 280px;}' \
-    -theme-str 'mainbox {children: [ "message", "listview" ];}' \
-    -theme-str 'listview {columns: 2; lines: 1;}' \
-    -theme-str 'element-text {horizontal-align: 0.5;}' \
-    -theme-str 'textbox {horizontal-align: 0.5;}' \
-    -dmenu \
-    -p 'Confirmation' \
-    -mesg 'Are you sure?' \
-    -theme "$THEME_PATH"
+  if [[ "$STYLE_REL" == type-3/* ]] && [[ -f "$HOME/.config/rofi/powermenu/type-3/shared/confirm.rasi" ]]; then
+    rofi -dmenu \
+      -p 'Confirmation' \
+      -mesg 'Are you sure?' \
+      -theme "$HOME/.config/rofi/powermenu/type-3/shared/confirm.rasi"
+  else
+    rofi -theme-str 'window {location: center; anchor: center; fullscreen: false; width: 350px;}' \
+      -theme-str 'mainbox {children: [ "message", "listview" ];}' \
+      -theme-str 'listview {columns: 2; lines: 1;}' \
+      -theme-str 'element-text {horizontal-align: 0.5;}' \
+      -theme-str 'textbox {horizontal-align: 0.5;}' \
+      -dmenu \
+      -p 'Confirmation' \
+      -mesg 'Are you sure?' \
+      -theme "$THEME_PATH"
+  fi
 }
 
 confirm_exit() {

@@ -32,11 +32,24 @@ mesg="Active: ${active_conn:-None}"
 
 nets=""
 if [[ "$wifi_state" == "enabled" ]]; then
-  nets="$(nmcli -t -f IN-USE,SSID,SECURITY,SIGNAL dev wifi list 2>/dev/null | awk -F: '
-    $2 != "" {
-      mark = ($1 == "*") ? "✓" : " ";
-      sec = ($3 == "" || $3 == "--") ? "Open" : $3;
-      printf "%s %-28s [%s · %s%%]\n", mark, $2, sec, $4
+  nets="$(nmcli -t -f IN-USE,SSID,SECURITY,SIGNAL dev wifi list 2>/dev/null | awk '
+    {
+      gsub(/\\\\/, "\001");
+      gsub(/\\:/, "\002");
+      n = split($0, f, ":");
+      in_use = f[1];
+      ssid = f[2];
+      sec = f[3];
+      sig = f[4];
+      gsub(/\002/, ":", ssid);
+      gsub(/\001/, "\\", ssid);
+      gsub(/\002/, ":", sec);
+      gsub(/\001/, "\\", sec);
+      if (ssid != "") {
+        mark = (in_use == "*") ? "✓" : " ";
+        s = (sec == "" || sec == "--") ? "Open" : sec;
+        printf "%s %-28s [%s · %s%%]\n", mark, ssid, s, sig;
+      }
     }' | awk '!seen[$0]++')"
 fi
 

@@ -34,11 +34,17 @@ rofi_cmd() {
     -dmenu -p "$prompt" -mesg "$mesg" -markup-rows -theme "${theme}"
 }
 
-polkit_cmd="pkexec env PATH=$PATH DISPLAY=${DISPLAY:-} XAUTHORITY=${XAUTHORITY:-}"
+run_as_root() {
+  local -a env_args=("PATH=$PATH")
+  [[ -n "${DISPLAY:-}" ]] && env_args+=("DISPLAY=$DISPLAY")
+  [[ -n "${XAUTHORITY:-}" ]] && env_args+=("XAUTHORITY=$XAUTHORITY")
+  pkexec env "${env_args[@]}" "$@"
+}
+
 chosen="$(echo -e "$option_1\n$option_2\n$option_3\n$option_4" | rofi_cmd)"
 case "$chosen" in
-  "$option_1") ${polkit_cmd} kitty ;;
-  "$option_2") ${polkit_cmd} dbus-run-session thunar ;;
-  "$option_3") ${polkit_cmd} kitty -e yazi ;;
-  "$option_4") ${polkit_cmd} kitty -e nvim ;;
+  "$option_1") run_as_root kitty ;;
+  "$option_2") run_as_root dbus-run-session thunar ;;
+  "$option_3") run_as_root kitty -e yazi ;;
+  "$option_4") run_as_root kitty -e nvim ;;
 esac

@@ -25,8 +25,11 @@ THEME="catppuccin-mocha"
 [[ -r "$THEME_FILE" ]] && THEME="$(tr -d '[:space:]' < "$THEME_FILE")"
 
 case "$THEME" in
-  ultra-instinct|ultra-instinct-omen)
+  ultra-instinct)
     DEFAULT_WP="$WP_DIR/ultra-instinct.jpg"
+    ;;
+  goku-ssj4)
+    DEFAULT_WP="$WP_DIR/goku-ssj4.jpg"
     ;;
   tokyo-night)
     DEFAULT_WP="$WP_DIR/City-Night.png"

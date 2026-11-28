@@ -80,7 +80,7 @@ modules-right = cpu memory sep network volume theme-switch powermenu systray
 [bar/side]
 inherit = bar/main
 monitor = "{{ $host.side_monitor_name }}"
-modules-right = systray
+modules-right =
 modules-left = i3 sep cpu temperature cpu-fan case-fan memory sep gpu-usage vram gpu-temperature gpu-fan
 modules-center =
 
@@ -97,7 +97,7 @@ monitor = ${env:POLYBAR_MONITOR:}
 height = {{ $host.polybar_aux_height }}
 bottom = true
 offset-y = 0
-modules-right = systray
+modules-right =
 modules-left = cpu temperature memory sep gpu-usage vram gpu-temperature
 modules-center =
 

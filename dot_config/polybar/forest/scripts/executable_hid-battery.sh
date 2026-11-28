@@ -4,10 +4,19 @@ shopt -s nullglob
 
 base="/sys/class/power_supply"
 
-capacity_files=("$base"/*/capacity)
+for cap in "$base"/*/capacity; do
+  dev_dir="${cap%/capacity}"
+  dev_name="${dev_dir##*/}"
+  case "$dev_name" in
+    BAT*|AC*|ADP*|ACAD*|CMB*|ucsi*) continue ;;
+  esac
+  if [[ -r "$dev_dir/scope" ]] && [[ "$(<"$dev_dir/scope")" == "System" ]]; then
+    continue
+  fi
+  if [[ -r "$cap" ]]; then
+    printf '%s%%\n' "$(<"$cap")"
+    exit 0
+  fi
+done
 
-if (( ${#capacity_files[@]} > 0 )) && [[ -r "${capacity_files[0]}" ]]; then
-  printf '%s%%\n' "$(cat "${capacity_files[0]}")"
-else
-  printf 'N/A\n'
-fi
+printf 'N/A\n'

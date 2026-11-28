@@ -7,7 +7,7 @@ mkdir -p "$STATE_DIR"
 THEMES=(
   "catppuccin-mocha"
   "ultra-instinct"
-  "ultra-instinct-omen"
+  "goku-ssj4"
   "tokyo-night"
   "rose-pine"
 )
@@ -64,11 +64,11 @@ apply_theme() {
       wp_default="$HOME/.config/wallpapers/ultra-instinct.jpg"
       update_cava_colors "#5eead4" "#7df9ff" "#38bdf8" "#60a5fa" "#c084fc" "#d8b4fe" "#f472b6" "#fb7185"
       ;;
-    ultra-instinct-omen)
-      kitty_src="$HOME/.config/kitty/themes/ultra-instinct-omen.conf"
-      btop_theme="$HOME/.config/btop/themes/ultra_instinct.theme"
-      wp_default="$HOME/.config/wallpapers/ultra-instinct.jpg"
-      update_cava_colors "#2dd4bf" "#38bdf8" "#60a5fa" "#818cf8" "#a5b4fc" "#cbd5e1" "#fb7185" "#f43f5e"
+    goku-ssj4)
+      kitty_src="$HOME/.config/kitty/themes/goku-ssj4.conf"
+      btop_theme="$HOME/.config/btop/themes/goku_ssj4.theme"
+      wp_default="$HOME/.config/wallpapers/goku-ssj4.jpg"
+      update_cava_colors "#fbbf24" "#f59e0b" "#fb923c" "#fb7185" "#f43f5e" "#ef233c" "#dc2626" "#ff3b5c"
       ;;
     tokyo-night)
       kitty_src="$HOME/.config/kitty/themes/tokyo-night.conf"
@@ -239,33 +239,40 @@ cycle_theme() {
   apply_theme "$next"
 }
 
+set_rofi_style() {
+  local subdir="$1"
+  local state_key="$2"
+  local label="$3"
+  local rel="$4"
+  if [[ -z "$rel" || "$rel" == /* || "$rel" == *..* || "$rel" != *.rasi || ! -f "$HOME/.config/rofi/${subdir}/${rel}" ]]; then
+    echo "Invalid or missing Rofi ${label} style: ${rel}" >&2
+    exit 1
+  fi
+  printf '%s\n' "$rel" > "$STATE_DIR/$state_key"
+  notify_ui "Rofi ${label}" "Style set to $rel"
+}
+
 case "${1:-}" in
   --theme) apply_theme "${2:?missing theme}" ;;
-  catppuccin-mocha|ultra-instinct|ultra-instinct-omen|tokyo-night|rose-pine) apply_theme "$1" ;;
+  catppuccin-mocha|ultra-instinct|goku-ssj4|tokyo-night|rose-pine) apply_theme "$1" ;;
   --cycle) cycle_theme ;;
   --list) printf '%s\n' "${THEMES[@]}" ;;
   --current) cat "$STATE_DIR/theme" 2>/dev/null || echo "catppuccin-mocha" ;;
   --bar) apply_bar_layout "${2:?missing layout}" ;;
-  --launcher)
-    printf '%s\n' "${2:?missing launcher style}" > "$STATE_DIR/rofi-launcher"
-    notify_ui "Rofi Launcher" "Style set to $2"
-    ;;
-  --powermenu)
-    printf '%s\n' "${2:?missing powermenu style}" > "$STATE_DIR/rofi-powermenu"
-    notify_ui "Rofi Powermenu" "Style set to $2"
-    ;;
+  --launcher) set_rofi_style "launchers" "rofi-launcher" "Launcher" "${2:?missing launcher style}" ;;
+  --powermenu) set_rofi_style "powermenu" "rofi-powermenu" "Powermenu" "${2:?missing powermenu style}" ;;
   --wallpaper) apply_wallpaper "${2:?missing wallpaper path}" ;;
   --effects) apply_effects "${2:?missing effects mode}" ;;
-  # Backward-compatible adi1090x flags
+  # Backward-compatible adi1090x & theme shorthand flags
   --default) apply_theme "catppuccin-mocha" ;;
   --ultra-instinct) apply_theme "ultra-instinct" ;;
-  --omen) apply_theme "ultra-instinct-omen" ;;
+  --ssj4|--goku-ssj4) apply_theme "goku-ssj4" ;;
   --tokyo-night) apply_theme "tokyo-night" ;;
   --rose-pine) apply_theme "rose-pine" ;;
   *)
     cat <<EOF
 Usage: $(basename "$0") [OPTION]
-  --theme <catppuccin-mocha|ultra-instinct|ultra-instinct-omen|tokyo-night|rose-pine>
+  --theme <catppuccin-mocha|ultra-instinct|goku-ssj4|tokyo-night|rose-pine>
   --cycle | --list | --current
   --bar <sleek|floating|minimal|telemetry>
   --launcher <type-N/style-M.rasi>

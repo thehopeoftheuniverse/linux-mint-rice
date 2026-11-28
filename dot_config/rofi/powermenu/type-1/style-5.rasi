@@ -76,14 +76,14 @@ textbox-prompt-colon {
     padding:                     10px 14px;
     border-radius:               4px;
     background-color:            @urgent;
-    text-color:                  @background;
+    text-color:                  @background-solid;
 }
 prompt {
     enabled:                     true;
     padding:                     10px;
     border-radius:               4px;
     background-color:            @active;
-    text-color:                  @background;
+    text-color:                  @background-solid;
 }
 
 /*****----- Message -----*****/
@@ -163,5 +163,5 @@ element selected.normal {
     border:                      0px 2px 0px 2px;
     border-radius:               4px;
     background-color:            var(selected);
-    text-color:                  var(background);
+    text-color:                  var(background-solid);
 }
