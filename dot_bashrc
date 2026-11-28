@@ -11,9 +11,13 @@ if ! command -v fd >/dev/null 2>&1 && command -v fdfind >/dev/null 2>&1; then
   alias fd='fdfind'
 fi
 
-if command -v fastfetch >/dev/null 2>&1; then
+if [[ $- == *i* ]] && [[ -z "${FROM_ROFI:-}" ]] && command -v fastfetch >/dev/null 2>&1; then
   fastfetch
 fi
+
+# Interactive-shell flag for readline bind rules below
+iatest=0
+[[ $- == *i* ]] && iatest=1
 
 # Source global definitions
 if [ -f /etc/bashrc ]; then
@@ -118,7 +122,11 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 alias ebrc='vim ~/.bashrc'
 
 # Show help for this .bashrc file
-alias hlp='less ~/.bashrc_help'
+if [[ -r "$HOME/.bashrc_help" ]]; then
+  alias hlp='less ~/.bashrc_help'
+else
+  alias hlp="printf '%s\n' 'No ~/.bashrc_help found.'"
+fi
 
 # alias to show the date
 alias da='date "+%Y-%m-%d %A %T %Z"'
@@ -126,7 +134,11 @@ alias da='date "+%Y-%m-%d %A %T %Z"'
 # Alias's to modified commands
 alias cp='cp -i'
 alias mv='mv -i'
-alias rm='trash -v'
+if command -v trash >/dev/null 2>&1; then
+  alias rm='trash -v'
+else
+  alias rm='rm -i'
+fi
 alias mkdir='mkdir -p'
 alias ps='ps auxf'
 alias ping='ping -c 10'

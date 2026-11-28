@@ -46,9 +46,14 @@ focused, output, workspace = find_focused(tree)
 if focused is None or output is None:
     raise SystemExit(0)
 
-# If currently fullscreen, exit fullscreen first so bars stay visible.
+# If currently fullscreen, exit fullscreen first and re-read geometry so
+# state_file records the window's true pre-maximize rect instead of fullscreen.
 if focused.get("fullscreen_mode", 0) != 0:
     i3_cmd("fullscreen disable")
+    tree = json.loads(subprocess.check_output(["i3-msg", "-t", "get_tree"], text=True))
+    focused, output, workspace = find_focused(tree)
+    if focused is None or output is None:
+        raise SystemExit(0)
 
 win_id = focused.get("id")
 state_file = STATE_DIR / f"{win_id}.json"

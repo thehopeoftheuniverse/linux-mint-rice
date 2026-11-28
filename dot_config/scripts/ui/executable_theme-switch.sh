@@ -23,6 +23,19 @@ notify_ui() {
   fi
 }
 
+spawn_bg() {
+  if command -v i3-msg >/dev/null 2>&1 && { [[ -n "${I3SOCK:-}" ]] || pgrep -u "$UID" -x i3 >/dev/null 2>&1; }; then
+    local cmd
+    printf -v cmd '%q ' "$@"
+    i3-msg -q "exec --no-startup-id ${cmd% }" >/dev/null 2>&1 && return 0
+  fi
+  if command -v setsid >/dev/null 2>&1; then
+    setsid -f "$@" </dev/null >/dev/null 2>&1
+  else
+    nohup "$@" </dev/null >/dev/null 2>&1 &
+  fi
+}
+
 update_cava_colors() {
   local c1="$1" c2="$2" c3="$3" c4="$4" c5="$5" c6="$6" c7="$7" c8="$8"
   local cava_cfg="$HOME/.config/cava/config"
@@ -134,7 +147,7 @@ apply_theme() {
         sleep 0.05
         tries=$((tries + 1))
       done
-      nohup dunst >/dev/null 2>&1 &
+      spawn_bg dunst
     fi
   fi
 
@@ -164,7 +177,7 @@ apply_theme() {
       i3-msg reload >/dev/null 2>&1 || true
     fi
     if [[ -x "$HOME/.config/polybar/launch.sh" ]]; then
-      nohup "$HOME/.config/polybar/launch.sh" >/dev/null 2>&1 &
+      spawn_bg "$HOME/.config/polybar/launch.sh"
     fi
   fi
 
@@ -191,7 +204,7 @@ apply_bar_layout() {
   esac
 
   if [[ -n "${DISPLAY:-}" && -x "$HOME/.config/polybar/launch.sh" ]]; then
-    nohup "$HOME/.config/polybar/launch.sh" >/dev/null 2>&1 &
+    spawn_bg "$HOME/.config/polybar/launch.sh"
   fi
   notify_ui "Polybar Layout" "Bar layout set to ${layout}"
 }
@@ -215,7 +228,7 @@ apply_effects() {
     full|minimal|off)
       printf '%s\n' "$mode" > "$STATE_DIR/effects"
       if [[ -n "${DISPLAY:-}" && -x "$HOME/.config/i3/scripts/start-picom.sh" ]]; then
-        nohup "$HOME/.config/i3/scripts/start-picom.sh" >/dev/null 2>&1 &
+        spawn_bg "$HOME/.config/i3/scripts/start-picom.sh"
       fi
       notify_ui "Compositor Effects" "Picom set to ${mode}"
       ;;

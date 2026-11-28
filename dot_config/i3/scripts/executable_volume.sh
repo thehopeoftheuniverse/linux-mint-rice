@@ -48,7 +48,10 @@ case "${1:-}" in
     elif command -v wpctl >/dev/null 2>&1; then
       wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ "${VOLUME_STEP}%+"
     elif command -v pactl >/dev/null 2>&1; then
-      pactl set-sink-volume @DEFAULT_SINK@ "+${VOLUME_STEP}%"
+      cur=$(pactl get-sink-volume @DEFAULT_SINK@ 2>/dev/null | grep -oE '[0-9]+%' | head -n1 | tr -d '%' || echo 0)
+      new_vol=$(( ${cur:-0} + VOLUME_STEP ))
+      (( new_vol > 100 )) && new_vol=100
+      pactl set-sink-volume @DEFAULT_SINK@ "${new_vol}%"
     fi
     get_state_and_notify
     ;;

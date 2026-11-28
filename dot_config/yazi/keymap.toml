@@ -40,7 +40,7 @@ prepend_keymap = [
   ], run = "plugin relative-motions 9", desc = "Move in relative steps" },
 
   # Rofi grid image preview
-  { on = "<C-g>", run = 'shell -- rofi -config ~/.config/rofi/rofi-gridview.rasi -modi filebrowser -show filebrowser -filebrowser-command "ya emit reveal" -filebrowser-directory "$(pwd)"', desc = "Grid view" },
+  { on = "<C-g>", run = 'shell -- rofi -theme ~/.config/rofi/launchers/type-3/style-1.rasi -modi filebrowser -show filebrowser -filebrowser-command "ya emit reveal" -filebrowser-directory "$(pwd)"', desc = "Grid view" },
 
   # linemode-plus plugin
   { on = [

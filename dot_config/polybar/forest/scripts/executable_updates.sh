@@ -3,6 +3,16 @@ set -u
 
 NOTIFY_ICON=/usr/share/icons/Papirus/32x32/apps/system-software-update.svg
 LAST_COUNT=-1
+INOTIFY_PID=""
+
+cleanup() {
+  if [[ -n "$INOTIFY_PID" ]]; then
+    kill "$INOTIFY_PID" 2>/dev/null || true
+    wait "$INOTIFY_PID" 2>/dev/null || true
+  fi
+}
+trap cleanup EXIT
+trap 'exit 0' TERM INT
 
 get_total_updates() {
   UPDATES=$("$HOME/.config/polybar/forest/scripts/updates-apt" 2>/dev/null | grep -c -v '^$' || true)
@@ -30,7 +40,10 @@ while true; do
 
   # Guard against missing inotifywait so the loop never spins at 100% CPU
   if command -v inotifywait >/dev/null 2>&1 && [[ -e /var/lib/dpkg/status ]]; then
-    inotifywait -e modify /var/lib/dpkg/status -t 7200 >/dev/null 2>&1 || sleep 60
+    inotifywait -e modify /var/lib/dpkg/status -t 7200 >/dev/null 2>&1 &
+    INOTIFY_PID=$!
+    wait "$INOTIFY_PID" || sleep 60
+    INOTIFY_PID=""
   else
     sleep 1800
   fi

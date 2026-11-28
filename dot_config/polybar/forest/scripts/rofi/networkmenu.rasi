@@ -120,7 +120,7 @@ element-text {
 
 element selected {
     background-color:               @se;
-    text-color:                     @bg;
+    text-color:                     @background-solid;
 	border:							0px 0px 0px 0px;
     border-radius:                  0px;
     border-color:                  	@ac;

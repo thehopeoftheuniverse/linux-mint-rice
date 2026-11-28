@@ -56,13 +56,7 @@ require("linemode-plus"):setup({
 -- relative motions config
 require("relative-motions"):setup({ show_numbers = "relative", show_motion = true, enter_mode = "first" })
 
--- 1. Initialize the plugin first
-require("relative-motions"):setup({
-	show_numbers = "relative",
-	-- any other configuration options you use
-})
-
--- 2. Wrap the plugin's number rendering method directly
+-- Wrap the plugin's number rendering method directly
 local old_entity_number = Entity.number
 
 Entity.number = function(self, index, total, file, hovered)
@@ -77,5 +71,8 @@ Entity.number = function(self, index, total, file, hovered)
 	return span
 end
 
--- set up my custom sorting rules plugin
-require("folder-rules"):setup()
+-- Set up custom sorting rules plugin only if installed
+local ok_fr, folder_rules = pcall(require, "folder-rules")
+if ok_fr then
+	folder_rules:setup()
+end

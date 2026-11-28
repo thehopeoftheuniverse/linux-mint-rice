@@ -3,6 +3,12 @@ set -u
 
 {{ $host := index .hosts .chezmoi.hostname | default .hosts.default }}
 
+LOCK_FILE="/tmp/polybar-launch-${UID}.lock"
+exec 9>"$LOCK_FILE"
+if command -v flock >/dev/null 2>&1; then
+  flock -w 10 9 || exit 1
+fi
+
 dir="$HOME/.config/polybar"
 state_dir="${XDG_CONFIG_HOME:-$HOME/.config}/ui-theme"
 style="forest"
@@ -146,23 +152,31 @@ case "${1:-}" in
   --sleek) bar_mode="sleek" ;;
 esac
 
-# Terminate already running bar instances
-killall -q polybar 2>/dev/null || true
-while pgrep -u "$UID" -x polybar >/dev/null 2>&1; do
-  sleep 0.2
+# Terminate already running bar instances (without requiring psmisc/killall)
+pkill -u "$UID" -x polybar 2>/dev/null || true
+pkill -u "$UID" -f "$dir/$style/scripts/updates.sh" 2>/dev/null || true
+tries=0
+while pgrep -u "$UID" -x polybar >/dev/null 2>&1 && (( tries < 25 )); do
+  sleep 0.1
+  tries=$((tries + 1))
 done
+if pgrep -u "$UID" -x polybar >/dev/null 2>&1; then
+  pkill -KILL -u "$UID" -x polybar 2>/dev/null || true
+  sleep 0.1
+fi
 
 {{ if gt $host.monitor_count 1 -}}
-polybar -q main -c "$cfg_path" &
-polybar -q side -c "$cfg_path" &
-polybar -q left -c "$cfg_path" &
+polybar -q main -c "$cfg_path" 9>&- &
+polybar -q side -c "$cfg_path" 9>&- &
+polybar -q left -c "$cfg_path" 9>&- &
 {{- else -}}
 if [[ "$bar_mode" == "minimal" ]]; then
-  polybar -q minimal -c "$cfg_path" &
+  polybar -q minimal -c "$cfg_path" 9>&- &
 elif [[ "$bar_mode" == "telemetry" ]]; then
-  polybar -q main -c "$cfg_path" &
-  polybar -q aux -c "$cfg_path" &
+  polybar -q main -c "$cfg_path" 9>&- &
+  polybar -q aux -c "$cfg_path" 9>&- &
 else
-  polybar -q main -c "$cfg_path" &
+  polybar -q main -c "$cfg_path" 9>&- &
 fi
 {{- end }}
+exec 9>&-

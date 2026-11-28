@@ -17,8 +17,12 @@ if ! pgrep -u "$UID" -f '^kitty --class kitty-monitor' >/dev/null 2>&1; then
   fi
 fi
 
-pgrep -u "$UID" -f '^kitty --class 1-scrtch' >/dev/null 2>&1 || kitty --class '1-scrtch' &
-pgrep -u "$UID" -f '^kitty --class 2-scrtch' >/dev/null 2>&1 || kitty --class '2-scrtch' &
+if ! pgrep -u "$UID" -f '^kitty --class 1-scrtch' >/dev/null 2>&1; then
+  kitty --class '1-scrtch' &
+fi
+if ! pgrep -u "$UID" -f '^kitty --class 2-scrtch' >/dev/null 2>&1; then
+  kitty --class '2-scrtch' &
+fi
 
 if command -v yazi >/dev/null 2>&1 && ! pgrep -u "$UID" -f '^kitty --class yazi-scrtch' >/dev/null 2>&1; then
   if command -v zsh >/dev/null 2>&1; then

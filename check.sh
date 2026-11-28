@@ -16,7 +16,7 @@ while IFS= read -r -d '' f; do
   else
     fail "$rel"
   fi
-done < <(find "$REPO_DIR" -path '*/.git' -prune -o -path '*/__pycache__' -prune -o -type f \( -name '*.sh' -o -name 'executable_*' \) ! -name '*.tmpl' ! -name '*.bak' ! -name '*.py' ! -name '*.pyc' -print0 | sort -z)
+done < <(find "$REPO_DIR" \( -path '*/.git' -o -path '*/__pycache__' -o -path '*/backups' -o -path '*/build' \) -prune -o -type f \( -name '*.sh' -o -name 'executable_*' \) ! -name '*.tmpl' ! -name '*.bak' ! -name '*.py' ! -name '*.pyc' -print0 | sort -z)
 
 PY=""
 for cand in python3 python; do
@@ -36,7 +36,7 @@ if [[ -n "$PY" ]]; then
     else
       fail "$rel"
     fi
-  done < <(find "$REPO_DIR" -path '*/.git' -prune -o -type f -name '*.py' -print0 | sort -z)
+  done < <(find "$REPO_DIR" \( -path '*/.git' -o -path '*/backups' -o -path '*/build' \) -prune -o -type f -name '*.py' -print0 | sort -z)
 
   echo
   echo "== Config data files =="

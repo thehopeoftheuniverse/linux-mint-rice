@@ -15,7 +15,7 @@
     progress_bar_corner_radius = 4
     icon_corner_radius = 6
     indicate_hidden = yes
-    transparency = 18
+    transparency = 20
     separator_height = 2
     padding = 12
     horizontal_padding = 14

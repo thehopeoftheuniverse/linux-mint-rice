@@ -48,7 +48,7 @@ prompt {
 	padding: 						0px;
 	background-color: 				@bga;
 	text-color: 					@ac;
-	font:							"feather 12";
+	font:							"JetBrainsMono Nerd Font 12";
 }
 
 entry {
@@ -121,7 +121,7 @@ element-text {
 
 element selected {
     background-color:               @se;
-    text-color:                     @bg;
+    text-color:                     @background-solid;
 	border:							0px 0px 0px 0px;
     border-radius:                  0px;
     border-color:                  	@ac;
