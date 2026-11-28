@@ -28,6 +28,12 @@ case "$THEME" in
   ultra-instinct|ultra-instinct-omen)
     DEFAULT_WP="$WP_DIR/ultra-instinct.jpg"
     ;;
+  tokyo-night)
+    DEFAULT_WP="$WP_DIR/City-Night.png"
+    ;;
+  rose-pine)
+    DEFAULT_WP="$WP_DIR/sakura-gate.jpg"
+    ;;
   *)
     DEFAULT_WP="$WP_DIR/catppuccin-wallpaper-25-hq.png"
     ;;

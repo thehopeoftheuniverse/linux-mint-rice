@@ -73,49 +73,64 @@ for ps in /sys/class/power_supply/*; do
 done
 
 # Auto-detect backlight device
+has_backlight=0
 for bl in /sys/class/backlight/*; do
   if [[ -d "$bl" ]]; then
     export POLYBAR_BACKLIGHT="$(basename "$bl")"
+    has_backlight=1
     break
   fi
 done
 
-# Compatibility adapter for Polybar < 3.7 (Debian 12 / Mint 21 lack internal/tray)
+# Runtime config adapter:
+# - Strips `backlight` when no backlight device exists (prevents desktop error spam)
+# - Rewrites `internal/tray` for Polybar < 3.7 (Debian 12 / Mint 21)
 pb_ver="$(polybar --version 2>/dev/null | sed -nE 's/^polybar ([0-9]+\.[0-9]+).*/\1/p' | head -n1 || true)"
-if [[ -n "$pb_ver" ]] && command -v python3 >/dev/null 2>&1; then
+is_legacy_pb=0
+if [[ -n "$pb_ver" ]]; then
   major="${pb_ver%%.*}"
   minor="${pb_ver#*.}"
   if (( major < 3 || (major == 3 && minor < 7) )); then
-    compat_dir="/tmp/polybar-compat-${UID}"
-    mkdir -p "$compat_dir"
-    cp -a "$dir/$style/." "$compat_dir/"
-    python3 - "$compat_dir" <<'PY'
+    is_legacy_pb=1
+  fi
+fi
+
+if (( is_legacy_pb == 1 || has_backlight == 0 )) && command -v python3 >/dev/null 2>&1; then
+  compat_dir="/tmp/polybar-compat-${UID}"
+  rm -rf "$compat_dir"
+  mkdir -p "$compat_dir"
+  cp -a "$dir/$style/." "$compat_dir/"
+  python3 - "$compat_dir" "$is_legacy_pb" "$has_backlight" <<'PY'
 import re, sys
 from pathlib import Path
 
 root = Path(sys.argv[1])
+legacy = sys.argv[2] == "1"
+has_bl = sys.argv[3] == "1"
 cfg = root / "config.ini"
 mods = root / "modules.ini"
 
-if mods.exists():
+if legacy and mods.exists():
     mt = mods.read_text(encoding="utf-8")
     mt = re.sub(r"\n\[module/systray\].*?(?=\n\[|\Z)", "\n", mt, flags=re.S)
     mods.write_text(mt, encoding="utf-8")
 
 if cfg.exists():
     ct = cfg.read_text(encoding="utf-8")
-    ct = re.sub(r"\bsystray\b", "", ct)
-    ct = re.sub(
-        r"^(modules-right\s*=.*)$",
-        r"\1\ntray-position = right\ntray-maxsize = 16\ntray-padding = 4\ntray-background = ${color.background}",
-        ct,
-        count=1,
-        flags=re.M,
-    )
+    if not has_bl:
+        ct = re.sub(r"\bbacklight\b[ \t]*", "", ct)
+    if legacy:
+        ct = re.sub(r"\bsystray\b", "", ct)
+        ct = re.sub(
+            r"^(modules-right\s*=.*)$",
+            r"\1\ntray-position = right\ntray-maxsize = 16\ntray-padding = 4\ntray-background = ${color.background}",
+            ct,
+            count=1,
+            flags=re.M,
+        )
     cfg.write_text(ct, encoding="utf-8")
 PY
-    cfg_path="$compat_dir/config.ini"
-  fi
+  cfg_path="$compat_dir/config.ini"
 fi
 
 # Read chosen bar mode from UI state (sleek | floating | minimal | telemetry)

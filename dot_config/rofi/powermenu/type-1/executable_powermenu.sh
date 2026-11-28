@@ -11,13 +11,23 @@ THEME_PATH="$HOME/.config/rofi/powermenu/$STYLE_REL"
 uptime="$(uptime -p | sed -e 's/up //g')"
 host="$(hostname)"
 
-shutdown='⏻ Shutdown'
-reboot='󰜉 Reboot'
-lock=' Lock'
-suspend='󰤄 Suspend'
-logout='󰍃 Logout'
-yes=' Yes'
-no=' No'
+if grep -q 'USE_BUTTONS=YES' "$THEME_PATH" 2>/dev/null; then
+  shutdown='⏻'
+  reboot='󰜉'
+  lock=''
+  suspend='󰤄'
+  logout='󰍃'
+  yes=''
+  no=''
+else
+  shutdown='⏻ Shutdown'
+  reboot='󰜉 Reboot'
+  lock=' Lock'
+  suspend='󰤄 Suspend'
+  logout='󰍃 Logout'
+  yes=' Yes'
+  no=' No'
+fi
 
 rofi_cmd() {
   rofi -dmenu \

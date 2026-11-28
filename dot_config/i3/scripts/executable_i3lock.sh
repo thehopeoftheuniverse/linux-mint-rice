@@ -32,6 +32,15 @@ case "$THEME" in
     WRONG_HEX="f7768eff"
     TEXT_HEX="c0caf5ff"
     ;;
+  rose-pine)
+    BG_HEX="191724"
+    RING_HEX="26233aff"
+    INSIDE_HEX="191724cc"
+    KEY_HEX="ebbcbaFF"
+    VERIFY_HEX="c4a7e7ff"
+    WRONG_HEX="eb6f92ff"
+    TEXT_HEX="e0def4ff"
+    ;;
   *)
     BG_HEX="1e1e2e"
     RING_HEX="313244ff"

@@ -33,7 +33,7 @@ window {
     enabled:                     true;
     margin:                      0px;
     padding:                     0px;
-    border:                      1px solid;
+    border:                      2px solid;
     border-radius:               12px;
     border-color:                @selected;
     cursor:                      "default";
@@ -74,14 +74,14 @@ textbox-prompt-colon {
     padding:                     10px 18px 10px 14px;
     border-radius:               10px;
     background-color:            @urgent;
-    text-color:                  @background;
+    text-color:                  @background-solid;
 }
 prompt {
     enabled:                     true;
     padding:                     10px;
     border-radius:               10px;
     background-color:            @active;
-    text-color:                  @background;
+    text-color:                  @background-solid;
 }
 
 /*****----- Message -----*****/
@@ -159,5 +159,5 @@ element-text {
 }
 element selected.normal {
     background-color:            var(selected);
-    text-color:                  var(background);
+    text-color:                  var(background-solid);
 }

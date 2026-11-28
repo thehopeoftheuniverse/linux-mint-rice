@@ -167,7 +167,7 @@ bindsym $mod+F1 exec --no-startup-id ~/.config/i3/scripts/cheatsheet.sh
 bindsym $mod+F2 exec --no-startup-id kitty --hold -e ~/.config/scripts/ui/doctor.sh
 bindsym Print exec --no-startup-id ~/.config/rofi/scripts/screenshot
 bindsym $mod+$alt+v exec --no-startup-id ~/.config/rofi/scripts/volume
-bindsym $mod+n exec --no-startup-id networkmanager_dmenu
+bindsym $mod+n exec --no-startup-id ~/.config/scripts/ui/network-menu.sh
 
 # Change focus
 bindsym $mod+h focus left
@@ -293,6 +293,7 @@ gaps outer 16
 
 default_border pixel 2
 default_floating_border pixel 2
+smart_borders on
 
 # Machine-local overrides (never overwritten by chezmoi or theme switcher)
 include ~/.config/i3/local.conf

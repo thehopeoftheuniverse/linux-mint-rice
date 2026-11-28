@@ -1,0 +1,13 @@
+/**
+ * Rosé Pine (Translucent Glass)
+ **/
+
+* {
+    background:       #191724cc;
+    background-solid: #12101aff;
+    background-alt:   #26233ab8;
+    foreground:       #e0def4ff;
+    selected:         #ebbcbaFF;
+    active:           #9ccfd8ff;
+    urgent:           #eb6f92ff;
+}

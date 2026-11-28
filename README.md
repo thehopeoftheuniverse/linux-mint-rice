@@ -10,7 +10,8 @@ A complete X11 workstation & rice managed with [chezmoi](https://www.chezmoi.io/
     - `ultra-instinct` — Dragon Ball **Ultra Instinct** Black UI (`#050508` obsidian void, silver-white `#f4f7ff`, icy cyan `#7df9ff` & aura violet `#c084fc`, custom wallpaper)
     - `ultra-instinct-omen` — Deep void black + electric sapphire
     - `tokyo-night` — Midnight neon blue
-  - **4 Polybar Layouts**: `sleek` (full-width top bar), `floating` (detached pill bar with accent border), `minimal` (clean floating island), `telemetry` (top bar + bottom CPU/GPU bar)
+    - `rose-pine` — Rosé Pine twilight glass (`sakura-gate.jpg` wallpaper)
+  - **4 Polybar Layouts**: `sleek` (full-width translucent top bar with CPU/RAM stats), `floating` (detached pill bar with accent border), `minimal` (clean floating island with CPU/RAM), `telemetry` (top bar + bottom CPU/GPU bar)
   - **Rofi Launcher & Powermenu Style Pickers** across bundled templates
   - **Visual Thumbnail Wallpaper Picker** (`Super + Shift + W`)
   - **Picom Compositor Profiles** (`full`, `minimal`, `off`) — auto-adapts across Picom v9/v10 (Debian 12 / Mint 21–22), Picom v12+ (animations), and VMs (`xrender` fallback)
