@@ -185,8 +185,9 @@ bindsym $mod+Shift+l move right
 bindsym $mod+x split h
 bindsym $mod+z split v
 
-# Fullscreen
+# Fullscreen (covers bars) & Maximize (fills workspace below top bar)
 bindsym $mod+Shift+f fullscreen toggle
+bindsym $mod+Shift+m exec --no-startup-id ~/.config/i3/scripts/maximize.sh
 
 # Container layout (uses i3-autolayout if available, else native i3 layout)
 bindsym $mod+Shift+s exec --no-startup-id sh -c 'command -v i3-autolayout >/dev/null 2>&1 && exec i3-autolayout stackmode --file-layout /tmp/i3-autolayout-stacked.save || exec i3-msg "layout stacking"'
@@ -224,21 +225,21 @@ assign [instance="^com.github.ismaelmartinez.teams_for_linux$"] $ws4
 ### --- Scratchpads --- ###
 for_window [class="scrtch"] \
 floating enable, \
+resize set $scratchpad_size, \
 move position center, \
-move scratchpad, \
-resize set $scratchpad_size
+move scratchpad
 
 for_window [class="^kitty-monitor$"] \
 floating enable, \
+resize set $scratchpad_size, \
 move position center, \
-move scratchpad, \
-resize set $scratchpad_size
+move scratchpad
 
 for_window [class="upgrade"] \
 floating enable, \
+resize set $scratchpad_size, \
 move position center, \
-move scratchpad, \
-resize set $scratchpad_size
+move scratchpad
 
 for_window [class="(?i)todoist"] floating enable, \
 resize set $todoist_size, \
@@ -288,8 +289,9 @@ include ~/.config/i3/current-theme.conf
 
 font pango:JetBrainsMono Nerd Font 11
 
-gaps inner 10
-gaps outer 16
+gaps inner 6
+gaps outer 0
+smart_gaps on
 
 default_border pixel 2
 default_floating_border pixel 2

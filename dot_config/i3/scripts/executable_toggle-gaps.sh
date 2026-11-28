@@ -6,10 +6,10 @@ cfg="$HOME/.config/i3/config"
 state="${XDG_CACHE_HOME:-$HOME/.cache}/dotfiles-gaps"
 mkdir -p "$(dirname "$state")"
 
-default_inner="$(awk '/^gaps inner / {print $3; exit}' "$cfg" 2>/dev/null || echo 10)"
-default_outer="$(awk '/^gaps outer / {print $3; exit}' "$cfg" 2>/dev/null || echo 16)"
-default_inner="${default_inner:-10}"
-default_outer="${default_outer:-16}"
+default_inner="$(awk '/^gaps inner / {print $3; exit}' "$cfg" 2>/dev/null || echo 6)"
+default_outer="$(awk '/^gaps outer / {print $3; exit}' "$cfg" 2>/dev/null || echo 0)"
+default_inner="${default_inner:-6}"
+default_outer="${default_outer:-0}"
 
 cur=1
 [[ -r "$state" ]] && cur="$(<"$state")"

@@ -59,6 +59,7 @@ To roll back to your exact pre-install configs:
 | Toggle Gaps / Toggle Polybar | `Super + Shift + G` / `Super + Shift + B` |
 | App Launcher / Terminal / Files / Browser | `Super + Space` / `Super + Enter` / `Super + F` / `Super + B` |
 | Power Menu / Screenshot | `Super + P` / `Print` |
+| Maximize (Keep Top Bar) / Fullscreen | `Super + Shift + M` / `Super + Shift + F` |
 | Focus / Move Window / Kill | `Super + H/J/K/L` / `Super + Shift + H/J/K/L` / `Super + Q` |
 
 ## Maintenance & Checks

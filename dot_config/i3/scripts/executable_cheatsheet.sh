@@ -26,7 +26,7 @@ subs = {
 }
 order = [
     "Super+Return", "Super+space", "Super+t", "Super+b", "Super+f",
-    "Super+q", "Super+Shift+f", "Super+Shift+space", "Super+p",
+    "Super+q", "Super+Shift+m", "Super+Shift+f", "Super+Shift+space", "Super+p",
     "Alt+1", "Alt+2", "Super+F1", "Super+F2",
 ]
 rows = []
