@@ -11,6 +11,9 @@ A complete X11 workstation & rice managed with [chezmoi](https://www.chezmoi.io/
     - `goku-ssj4` — Dragon Ball **Goku SSJ4** Red (`#080406` crimson-void, primal SSJ4 crimson fur `#ef233c`, fiery scarlet aura `#fb7185`, golden-amber ki `#fbbf24`, 4K wallpaper)
     - `tokyo-night` — Midnight neon blue
     - `rose-pine` — Rosé Pine twilight glass (`sakura-gate.jpg` wallpaper)
+    - `ddlc` — **Doki Doki Literature Club** Dark Clubroom (`#0e0910` void, sakura pink `#ff6b9d` & Monika emerald `#34d399`)
+    - `bleach-yhwach` — **Bleach Soul King Yhwach** Pure Monochrome (`#040405` void, crisp white `#ffffff` & silver `#d4d4d8`, 4K B&W wallpaper)
+    - `sasuke` — **Naruto Sasuke** Midnight Void (`#06040c` void, Susanoo purple `#a855f7` & Rinnegan violet `#c084fc`, 4K wallpaper)
   - **4 Polybar Layouts**: `sleek` (full-width translucent top bar with CPU/RAM stats), `floating` (detached pill bar with accent border), `minimal` (clean floating island with CPU/RAM), `telemetry` (top bar + bottom CPU/GPU bar)
   - **Rofi Launcher & Powermenu Style Pickers** across bundled templates
   - **Visual Thumbnail Wallpaper Picker** (`Super + Shift + W`)

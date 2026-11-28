@@ -1,0 +1,13 @@
+/**
+ * Doki Doki Literature Club (Dark Clubroom + Sakura Pink & Emerald - Translucent Glass)
+ **/
+
+* {
+    background:       #0e0910cc;
+    background-solid: #08050aff;
+    background-alt:   #1d1221bf;
+    foreground:       #fff0f6ff;
+    selected:         #ff6b9dff;
+    active:           #34d399ff;
+    urgent:           #f43f5eff;
+}

@@ -1,0 +1,13 @@
+/**
+ * Bleach: Soul King Yhwach (Pure Monochrome B&W - Translucent Glass)
+ **/
+
+* {
+    background:       #040405cc;
+    background-solid: #020203ff;
+    background-alt:   #111114bf;
+    foreground:       #fafafaff;
+    selected:         #ffffffff;
+    active:           #d4d4d8ff;
+    urgent:           #e4e4e7ff;
+}

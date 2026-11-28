@@ -37,6 +37,15 @@ case "$THEME" in
   rose-pine)
     DEFAULT_WP="$WP_DIR/sakura-gate.jpg"
     ;;
+  ddlc)
+    DEFAULT_WP="$WP_DIR/ddlc.png"
+    ;;
+  bleach-yhwach)
+    DEFAULT_WP="$WP_DIR/bleach-yhwach.png"
+    ;;
+  sasuke)
+    DEFAULT_WP="$WP_DIR/sasuke.jpg"
+    ;;
   *)
     DEFAULT_WP="$WP_DIR/catppuccin-wallpaper-25-hq.png"
     ;;

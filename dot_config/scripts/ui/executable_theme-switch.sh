@@ -10,6 +10,9 @@ THEMES=(
   "goku-ssj4"
   "tokyo-night"
   "rose-pine"
+  "ddlc"
+  "bleach-yhwach"
+  "sasuke"
 )
 
 notify_ui() {
@@ -94,6 +97,24 @@ apply_theme() {
       btop_theme="$HOME/.config/btop/themes/rose_pine.theme"
       wp_default="$HOME/.config/wallpapers/sakura-gate.jpg"
       update_cava_colors "#31748f" "#9ccfd8" "#c4a7e7" "#ebbcba" "#ea9a97" "#f6c177" "#eb6f92" "#eb6f92"
+      ;;
+    ddlc)
+      kitty_src="$HOME/.config/kitty/themes/ddlc.conf"
+      btop_theme="$HOME/.config/btop/themes/ddlc.theme"
+      wp_default="$HOME/.config/wallpapers/ddlc.png"
+      update_cava_colors "#34d399" "#2dd4bf" "#c084fc" "#f5d0e2" "#ff6b9d" "#fb7185" "#fbbf24" "#f43f5e"
+      ;;
+    bleach-yhwach)
+      kitty_src="$HOME/.config/kitty/themes/bleach-yhwach.conf"
+      btop_theme="$HOME/.config/btop/themes/bleach_yhwach.theme"
+      wp_default="$HOME/.config/wallpapers/bleach-yhwach.png"
+      update_cava_colors "#3f3f46" "#52525b" "#71717a" "#a1a1aa" "#d4d4d8" "#e4e4e7" "#fafafa" "#ffffff"
+      ;;
+    sasuke)
+      kitty_src="$HOME/.config/kitty/themes/sasuke.conf"
+      btop_theme="$HOME/.config/btop/themes/sasuke.theme"
+      wp_default="$HOME/.config/wallpapers/sasuke.jpg"
+      update_cava_colors "#422e7a" "#818cf8" "#a78bfa" "#a855f7" "#c084fc" "#d8b4fe" "#f5f3ff" "#f43f5e"
       ;;
     *)
       echo "Unknown theme: $theme" >&2
@@ -267,7 +288,7 @@ set_rofi_style() {
 
 case "${1:-}" in
   --theme) apply_theme "${2:?missing theme}" ;;
-  catppuccin-mocha|ultra-instinct|goku-ssj4|tokyo-night|rose-pine) apply_theme "$1" ;;
+  catppuccin-mocha|ultra-instinct|goku-ssj4|tokyo-night|rose-pine|ddlc|bleach-yhwach|sasuke) apply_theme "$1" ;;
   --cycle) cycle_theme ;;
   --list) printf '%s\n' "${THEMES[@]}" ;;
   --current) cat "$STATE_DIR/theme" 2>/dev/null || echo "catppuccin-mocha" ;;
@@ -282,10 +303,13 @@ case "${1:-}" in
   --ssj4|--goku-ssj4) apply_theme "goku-ssj4" ;;
   --tokyo-night) apply_theme "tokyo-night" ;;
   --rose-pine) apply_theme "rose-pine" ;;
+  --ddlc) apply_theme "ddlc" ;;
+  --bleach-yhwach|--yhwach) apply_theme "bleach-yhwach" ;;
+  --sasuke) apply_theme "sasuke" ;;
   *)
     cat <<EOF
 Usage: $(basename "$0") [OPTION]
-  --theme <catppuccin-mocha|ultra-instinct|goku-ssj4|tokyo-night|rose-pine>
+  --theme <catppuccin-mocha|ultra-instinct|goku-ssj4|tokyo-night|rose-pine|ddlc|bleach-yhwach|sasuke>
   --cycle | --list | --current
   --bar <sleek|floating|minimal|telemetry>
   --launcher <type-N/style-M.rasi>

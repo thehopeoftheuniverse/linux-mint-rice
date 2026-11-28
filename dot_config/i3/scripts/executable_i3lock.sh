@@ -50,6 +50,33 @@ case "$THEME" in
     WRONG_HEX="eb6f92ff"
     TEXT_HEX="e0def4ff"
     ;;
+  ddlc)
+    BG_HEX="0e0910"
+    RING_HEX="3a2642ff"
+    INSIDE_HEX="130c16cc"
+    KEY_HEX="ff6b9dff"
+    VERIFY_HEX="34d399ff"
+    WRONG_HEX="f43f5eff"
+    TEXT_HEX="fff0f6ff"
+    ;;
+  bleach-yhwach)
+    BG_HEX="040405"
+    RING_HEX="2a2a30ff"
+    INSIDE_HEX="08080acc"
+    KEY_HEX="ffffffff"
+    VERIFY_HEX="d4d4d8ff"
+    WRONG_HEX="e4e4e7ff"
+    TEXT_HEX="fafafaff"
+    ;;
+  sasuke)
+    BG_HEX="06040c"
+    RING_HEX="2d2152ff"
+    INSIDE_HEX="0a0714cc"
+    KEY_HEX="a855f7ff"
+    VERIFY_HEX="c084fcff"
+    WRONG_HEX="f43f5eff"
+    TEXT_HEX="f5f3ffff"
+    ;;
   *)
     BG_HEX="1e1e2e"
     RING_HEX="313244ff"

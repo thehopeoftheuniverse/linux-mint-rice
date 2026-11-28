@@ -42,7 +42,10 @@ case "$main_choice" in
       "$(mark_active ultra-instinct "$current_theme")ultra-instinct       │ Dragon Ball Black UI (Silver & Ki Cyan)" \
       "$(mark_active goku-ssj4 "$current_theme")goku-ssj4            │ Dragon Ball SSJ4 Red (Crimson Fur & Gold Ki)" \
       "$(mark_active tokyo-night "$current_theme")tokyo-night          │ Neon Midnight Blue Glass" \
-      "$(mark_active rose-pine "$current_theme")rose-pine            │ Rosé Pine Twilight Glass" | \
+      "$(mark_active rose-pine "$current_theme")rose-pine            │ Rosé Pine Twilight Glass" \
+      "$(mark_active ddlc "$current_theme")ddlc                 │ DDLC Dark Clubroom (Sakura Pink & Emerald)" \
+      "$(mark_active bleach-yhwach "$current_theme")bleach-yhwach        │ Bleach Soul King Yhwach (Pure Monochrome B&W)" \
+      "$(mark_active sasuke "$current_theme")sasuke               │ Naruto Sasuke (Susanoo Purple & Rinnegan)" | \
       rofi_menu "Theme" "Choose desktop theme across i3, Polybar, Rofi, Kitty, Dunst & btop")
     clean="${pick#✓ }"
     clean="${clean#  }"

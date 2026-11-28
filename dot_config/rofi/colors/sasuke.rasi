@@ -1,0 +1,13 @@
+/**
+ * Naruto: Sasuke (Midnight Void + Purple Susanoo & Rinnegan - Translucent Glass)
+ **/
+
+* {
+    background:       #06040ccc;
+    background-solid: #030207ff;
+    background-alt:   #130e24bf;
+    foreground:       #f5f3ffff;
+    selected:         #a855f7ff;
+    active:           #c084fcff;
+    urgent:           #f43f5eff;
+}

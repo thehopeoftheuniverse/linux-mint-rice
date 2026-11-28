@@ -19,7 +19,7 @@ while [[ $# -gt 0 ]]; do
     -h|--help)
       cat <<EOF
 Usage: ./install-debian.sh [OPTIONS]
-  --theme <catppuccin-mocha|ultra-instinct|goku-ssj4|tokyo-night|rose-pine>
+  --theme <catppuccin-mocha|ultra-instinct|goku-ssj4|tokyo-night|rose-pine|ddlc|bleach-yhwach|sasuke>
   --role <desktop|server>
   --shell         Set Zsh as your login shell
   --skip-apt      Skip apt package installation
